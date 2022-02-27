@@ -13,16 +13,12 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ProgressBar progressBar;
-    private RelativeLayout layout;
-    private ImageView bg;
-    private TextView cityName;
-    private TextInputEditText citySearch;
-    private ImageView searchIcon;
-    private TextView temperature;
-    private ImageView weatherIcon;
-    private TextView description;
-    private RecyclerView recycler;
+    private ProgressBar loadingPB;
+    private RelativeLayout homeRL;
+    private TextView cityNameTV, temperatureNowTV, conditionNowTV;
+    private TextInputEditText citySearchTIET;
+    private ImageView searchIV, weatherIV, backgroundIV;
+    private RecyclerView weatherRV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +26,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        progressBar = findViewById(R.id.idProgressBar);
-        layout = findViewById(R.id.idHome);
-        bg = findViewById(R.id.idBg);
-        cityName = findViewById(R.id.idCityName);
-        citySearch = findViewById(R.id.idCitySearch);
-        searchIcon = findViewById(R.id.idImgSearch);
-        temperature = findViewById(R.id.idTemperatureNow);
-        weatherIcon = findViewById(R.id.idWeatherNowIcon);
-        description = findViewById(R.id.idDescription);
-        recycler = findViewById(R.id.idRecycler);
+        loadingPB = findViewById(R.id.idLoadingPB);
+        homeRL = findViewById(R.id.idHomeRL);
+        cityNameTV = findViewById(R.id.idCityNameTV);
+        temperatureNowTV = findViewById(R.id.idTemperatureNowTV);
+        conditionNowTV = findViewById(R.id.idConditionNowTV);
+        citySearchTIET = findViewById(R.id.idCitySearch);
+        searchIV = findViewById(R.id.idImgSearch);
+        weatherIV = findViewById(R.id.idWeatherNowIcon);
+        backgroundIV = findViewById(R.id.idBackgroundIV);
+        weatherRV = findViewById(R.id.idWeatherRV);
     }
 }

@@ -8,27 +8,27 @@
     tools:context=".MainActivity" >
 
     <ProgressBar
+        android:id="@+id/idLoadingPB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/idProgressBar"
         android:visibility="gone"
         android:layout_centerInParent="true" />
 
     <RelativeLayout
+        android:id="@+id/idHomeRL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/idHome"
         android:visibility="visible" >
 
         <ImageView
-            android:id="@+id/idBg"
+            android:id="@+id/idBackgroundIV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@color/black" />
+            android:src="@color/grey_shade" />
 
         <TextView
-            android:id="@+id/idCityName"
+            android:id="@+id/idCityNameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@id/idCityName"
+            android:layout_below="@id/idCityNameTV"
             android:weightSum="5" >
 
             <com.google.android.material.textfield.TextInputLayout
@@ -84,7 +84,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/idTemperatureNow"
+            android:id="@+id/idTemperatureNowTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/idLayout"
@@ -104,7 +104,7 @@
             android:id="@+id/idWeatherNowIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/idTemperatureNow"
+            android:layout_below="@id/idTemperatureNowTV"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
@@ -115,7 +115,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/idDescription"
+            android:id="@+id/idConditionNowTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/idWeatherNowIcon"
@@ -142,7 +142,7 @@
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/idRecycler"
+            android:id="@+id/idWeatherRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
