@@ -1,14 +1,16 @@
-package com.cm.weatherforecast;
+package com.cm.weatherforecast.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class ForecastActivity extends AppCompatActivity {
+import com.cm.weatherforecast.R;
+
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forecast);
+        setContentView(R.layout.activity_settings);
     }
 }

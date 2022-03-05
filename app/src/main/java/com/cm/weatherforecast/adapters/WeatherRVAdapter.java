@@ -1,6 +1,4 @@
-package com.cm.weatherforecast;
-
-import static android.text.TextUtils.concat;
+package com.cm.weatherforecast.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cm.weatherforecast.R;
+import com.cm.weatherforecast.modals.WeatherRVModal;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,8 +42,9 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.View
     @Override
     public void onBindViewHolder(@NonNull WeatherRVAdapter.ViewHolder holder, int position) {
         WeatherRVModal modal = weatherRVModalArrayList.get(position);
-        holder.tempretureTV.setText(modal.getTemperature()+"`C");
-        Picasso.get().load("http://".concat(modal.getIcon())).into(holder.weatherIV);
+        holder.tempretureTV.setText(modal.getTemperature()+"°C");
+        RequestCreator v = Picasso.get().load("http://"+modal.getIcon());
+        v.into(holder.weatherIV);
         holder.windTV.setText(modal.getWindSpeed()+"Km/h");
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");

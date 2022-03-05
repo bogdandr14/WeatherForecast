@@ -1,4 +1,4 @@
-package com.cm.weatherforecast;
+package com.cm.weatherforecast.modals;
 
 public class WeatherRVModal {
 
