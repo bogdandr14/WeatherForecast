@@ -30,8 +30,8 @@ public class LocationManagerActivity extends AppCompatActivity {
 
     private void setDummyForLocations(){
         locationsList = new ArrayList<>();
-        for (int i = 0; i < 24; i++) {
-            locationsList.add(new LocationModal("2001-01-01 " + (i < 10 ? "0" : "") + i + ":00", "35", "cdn.weatherapi.com/weather/64x64/day/122.png", String.valueOf(i)));
+        for (int i = 0; i < 4; i++) {
+            locationsList.add(new LocationModal("location " + i , "35", "1.232", "32.42"));
         }
         locationAdapter = new LocationAdapter(this, locationsList);
         locationsRV.setAdapter(locationAdapter);

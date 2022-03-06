@@ -52,7 +52,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.deleteIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "sadsadhjbn", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "do do do", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -79,7 +79,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         @Override
         public void onClick(View view) {
             view.setBackgroundColor(0xf3342);
-            Toast.makeText(context, "na ba coaie", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "na na na", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -4,6 +4,270 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/day_bg"
     tools:context=".activities.SettingsActivity">
 
+    <LinearLayout
+        android:id="@+id/idSettingsLL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/idSettingsBackMB"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:backgroundTint="#078108"
+            android:text="Back to weather"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/idTemperatureMeasurementTV"
+            tools:layout_editor_absoluteX="7dp" />
+        <TextView
+            android:id="@+id/idTemperatureMeasurementTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Temperature measurement:"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+            <RadioGroup
+                android:id="@+id/idTemperatureMeasurementRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/idCelsiusRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onTemperatureRBClicked"
+                    android:textColor="@color/black"
+                    android:text="Celsius"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/idFahrenheitRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onTemperatureRBClicked"
+                    android:textColor="@color/black"
+                    android:text="Fahrenheit"
+                    android:textSize="20sp" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/idPressureMeasurementTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Pressure measurement:"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+            <RadioGroup
+                android:id="@+id/idPressureMeasurementRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/idMillibarsRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onPressureRBClicked"
+                    android:textColor="@color/black"
+                    android:text="mb"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/idMmHgRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onPressureRBClicked"
+                    android:textColor="@color/black"
+                    android:text="mm Hg"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/idPsiRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onPressureRBClicked"
+                    android:textColor="@color/black"
+                    android:text="psi"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/idAtmRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onPressureRBClicked"
+                    android:textColor="@color/black"
+                    android:text="atm"
+                    android:textSize="20sp" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/idVisibilityMeasurementTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Visibility measurement:"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+            <RadioGroup
+                android:id="@+id/idVisibilityMeasurementRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/idVisibilityInKmRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onVisibilityRBClicked"
+                    android:textColor="@color/black"
+                    android:text="Km"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/idVisibilityInMilesRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onVisibilityRBClicked"
+                    android:textColor="@color/black"
+                    android:text="miles"
+                    android:textSize="20sp" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/idWindMeasurementTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Wind speed:"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+            <RadioGroup
+                android:id="@+id/idWindMeasurementRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/idWindInKmRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onWindRBClicked"
+                    android:textColor="@color/black"
+                    android:text="Km/h"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/idWindInMilesRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onWindRBClicked"
+                    android:textColor="@color/black"
+                    android:text="miles/h"
+                    android:textSize="20sp" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/idRainfallMeasurementTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Rainfall quantity:"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+            <RadioGroup
+                android:id="@+id/idRainfallMeasurementRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/idMillimetersRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onRainfallRBClicked"
+                    android:textColor="@color/black"
+                    android:text="mm"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/idInchRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:onClick="onRainfallRBClicked"
+                    android:textColor="@color/black"
+                    android:text="inch"
+                    android:textSize="20sp" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
