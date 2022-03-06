@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="4dp">
+
+        <GridLayout
+            android:id="@+id/idDetailsGL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/today_details"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:rowCount="4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idMainLL">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="7 March,\nSunny"
+                android:textSize="32sp"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/idWeatherNowIcon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@id/idTemperatureNowTV"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:src="@drawable/sunny_weather_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Minimum Temp.: 10°C"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Maximum Temp.: 30°C"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Wind Speed: 5km/h"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Wind Direction: NW"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Humidity: 10%"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Pressure: 756mmHg"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Chance of xxxxx: 10%"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Quantity of xxxxx: 10mm"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Dawn: 08:42"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Dusk: 21:42"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Moon Phase: Full Moon"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Air Quality: 1"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
