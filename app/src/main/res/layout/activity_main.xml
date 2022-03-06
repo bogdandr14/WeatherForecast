@@ -5,23 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/day_bg"
-    tools:context=".activities.MainActivity"
     android:overScrollMode="never"
-    android:padding="6dp">
+    tools:context=".activities.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/idHomeRL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            android:orientation="vertical">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,10 +31,10 @@
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:padding="6dp"
-                    android:src="@drawable/favorite"
+                    android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:clickable="true"/>
+                    android:padding="6dp"
+                    android:src="@drawable/favorite" />
 
                 <TextView
                     android:id="@+id/idCityNameTV"
@@ -48,18 +46,18 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="30sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/idSettings"
-                    android:layout_gravity="end"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_settings"
+                    android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:clickable="true"/>
+                    android:padding="6dp"
+                    android:src="@drawable/ic_settings" />
             </LinearLayout>
 
 
@@ -103,9 +101,9 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:text="Sunny"
-                android:textStyle="bold"
                 android:textAlignment="center"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
@@ -114,26 +112,27 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_marginBottom="10dp"
+            android:gravity="center"
             android:text="Weather Now"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@+id/idHomeRL"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idHomeRL" />
 
         <GridLayout
             android:id="@+id/idDetailsGL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/idHourlyWeatherText"
-            android:columnCount="2"
-            android:rowCount="4"
+            android:layout_margin="10dp"
             android:layout_marginTop="10dp"
+            android:background="@drawable/today_details"
+            android:columnCount="2"
             android:orientation="horizontal"
             android:padding="10dp"
-            android:background="@drawable/today_details">
+            android:rowCount="4"
+            app:layout_constraintTop_toBottomOf="@id/idHourlyWeatherText">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -143,7 +142,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="Feels like: 36°C"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -152,7 +152,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="Pressure: 756mmHg"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -161,7 +162,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="Wind Speed: 5km/h"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -170,7 +172,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="Wind Direction: NW"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -179,7 +182,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="Humidity: 10%"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -188,7 +192,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="Clouds: 5%"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -197,7 +202,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="Visibility: 10km"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -206,7 +212,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="UV Index: 2"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
         </GridLayout>
 
@@ -214,17 +220,18 @@
             android:id="@+id/idWeatherRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/idDetailsGL"
-            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idDetailsGL" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/forecastMB"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginHorizontal="10dp"
             android:backgroundTint="#078108"
             android:text="7-day Forecast"
             android:textColor="#fff"
