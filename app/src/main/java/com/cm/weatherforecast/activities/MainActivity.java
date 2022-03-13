@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void getWeatherInfo(String cityName) {
+        String url = "http://api.weatherapi.com/v1/forecast.json?key=244e95839e83453bb05122307222002&q=" + cityName +"&days=7&aqi=yes&alerts=yes";
+    }
+
     private void setDummyHourlyWeather(){
         hourlyWeatherListRVM = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
