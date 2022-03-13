@@ -1,5 +1,8 @@
 package com.cm.weatherforecast.adapters;
 
+import static android.app.Activity.RESULT_OK;
+import static com.cm.weatherforecast.activities.MainActivity.CITY_NAME_MESSAGE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -79,6 +82,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         @Override
         public void onClick(View view) {
             view.setBackgroundColor(0xf3342);
+            String reply = cityNameTV.getText().toString();
+            Intent replyIntent = new Intent();
+            replyIntent.putExtra(CITY_NAME_MESSAGE, reply);
+//            setResult(RESULT_OK,replyIntent);
+//            finish(); //TODO
             Toast.makeText(context, "na na na", Toast.LENGTH_SHORT).show();
         }
     }
