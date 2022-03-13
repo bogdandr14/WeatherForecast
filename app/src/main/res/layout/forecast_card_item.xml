@@ -107,7 +107,7 @@
             android:layout_margin="8dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
-            android:text="Chance of xxxxx: 10%"
+            android:text="Rainfall chance: 10%"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
@@ -117,7 +117,7 @@
             android:layout_margin="8dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
-            android:text="Quantity of xxxxx: 10mm"
+            android:text="Rainfall quantity: 10mm"
             android:textColor="@color/white"
             android:textStyle="bold" />
 

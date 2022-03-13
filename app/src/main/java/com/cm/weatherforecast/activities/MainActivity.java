@@ -20,6 +20,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String CITY_NAME_MESSAGE = "CITY_NAME_MESSAGE";
+    public static final int TEXT_REQUEST = 1;
+
 
     private ProgressBar loadingPB;
     private RelativeLayout homeRL;
@@ -38,15 +41,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        loadingPB = findViewById(R.id.idLoadingPB);
+        loadingPB = findViewById(R.id.idLoadingPB);
 //        homeRL = findViewById(R.id.idHomeRL);
-//        cityNameTV = findViewById(R.id.idCityNameTV);
-//        temperatureNowTV = findViewById(R.id.idTemperatureNowTV);
-//        conditionNowTV = findViewById(R.id.idConditionNowTV);
-//        citySearchTIET = findViewById(R.id.idCitySearch);
-//        searchIV = findViewById(R.id.idImgSearch);
-//        weatherIV = findViewById(R.id.idWeatherNowIcon);
-//        backgroundIV = findViewById(R.id.idBackgroundIV);
+        cityNameTV = findViewById(R.id.idCityNameTV);
+        temperatureNowTV = findViewById(R.id.idTemperatureNowTV);
+        conditionNowTV = findViewById(R.id.idConditionNowTV);
+        citySearchTIET = findViewById(R.id.idCitySearch);
+        searchIV = findViewById(R.id.idImgSearch);
+        weatherIV = findViewById(R.id.idWeatherNowIcon);
         weatherRV = findViewById(R.id.idWeatherRV);
         settingsIV = findViewById(R.id.idSettings);
         locationManagerIV = findViewById(R.id.idLocationManager);
@@ -55,6 +57,22 @@ public class MainActivity extends AppCompatActivity {
         setDummyHourlyWeather();
         setListeners();
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode,
+                                 int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == TEXT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String cityName = data.getStringExtra(CITY_NAME_MESSAGE);
+                cityNameTV.setText(cityName);
+                //TODO use api to get info for the current CITY
+            }
+            else{
+                //TODO use api to get info for the current LOCATION
+            }
+        }
     }
 
     private void setDummyHourlyWeather(){
@@ -70,7 +88,10 @@ public class MainActivity extends AppCompatActivity {
         materialB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ForecastActivity.class));
+                String message = cityNameTV.getText().toString();
+                Intent intent = new Intent(getApplicationContext(), ForecastActivity.class);
+                intent.putExtra(CITY_NAME_MESSAGE, message);
+                startActivity(intent);
             }
         });
 
@@ -84,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         locationManagerIV.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                startActivity(new Intent(getApplicationContext(),LocationManagerActivity.class));
+                startActivityForResult(new Intent(getApplicationContext(),LocationManagerActivity.class), TEXT_REQUEST);
             }
         });
     }
