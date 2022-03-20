@@ -51,16 +51,21 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.deleteIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                locationModalArrayList.remove(modal);
+                notifyDataSetChanged();
                 Toast.makeText(context, "delete location", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
     @Override
     public int getItemCount() {
 
         return locationModalArrayList.size();
+    }
+
+    public List<LocationModal> getLocationList() {
+        return this.locationModalArrayList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -83,7 +88,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             replyIntent.putExtra(CITY_NAME_MESSAGE, reply);
 //            setResult(RESULT_OK,replyIntent);
 //            finish(); //TODO
-            Toast.makeText(context, "return to main activity", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, reply, Toast.LENGTH_SHORT).show();
             context.startActivity(replyIntent);
 
         }

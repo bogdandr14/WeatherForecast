@@ -51,6 +51,10 @@ public class LocationManagerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 //TODO ADD CITY TO LIST
+                locationsList = locationAdapter.getLocationList();
+                locationsList.add(new LocationModal(citySearchTIET.getText().toString(), "35", "1.232", "32.42"));
+                locationAdapter = new LocationAdapter(getApplicationContext(), locationsList);
+                interestLocationsRV.setAdapter(locationAdapter);
                 Toast.makeText(getApplicationContext(), "add location", Toast.LENGTH_SHORT).show();
             }
         });

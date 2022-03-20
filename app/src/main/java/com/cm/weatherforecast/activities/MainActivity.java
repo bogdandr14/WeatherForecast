@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String CITY_NAME_MESSAGE = "CITY_NAME_MESSAGE";
     public static final int TEXT_REQUEST = 1;
 
-
     private ProgressBar loadingPB;
     private ImageView settingsIV, locationManagerIV;
 
