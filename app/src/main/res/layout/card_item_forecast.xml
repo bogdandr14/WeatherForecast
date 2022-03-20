@@ -12,7 +12,7 @@
         android:id="@+id/idDetailsGL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/today_details"
+        android:background="@drawable/card_today_details"
         android:columnCount="2"
         android:orientation="horizontal"
         android:padding="10dp"
@@ -22,6 +22,7 @@
         app:layout_constraintTop_toBottomOf="@+id/idMainLL">
 
         <TextView
+            android:id="@+id/idForecastDayTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -33,7 +34,7 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/idWeatherNowIcon"
+            android:id="@+id/idForecastWeatherIV"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_below="@id/idTemperatureNowTV"
@@ -42,6 +43,7 @@
             android:src="@drawable/sunny_weather_icon" />
 
         <TextView
+            android:id="@+id/idForecastMinTempTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -52,6 +54,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastMaxTempTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -62,6 +65,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastWindSpeedTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -72,6 +76,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastWindDirectionTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -82,6 +87,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastHumidityTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -92,6 +98,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastPressureTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -102,6 +109,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastRainfallChanceTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -112,6 +120,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastRainfallQuantityTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -122,6 +131,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastDawnTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -132,6 +142,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastDuskTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -142,6 +153,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastMoonPhaseTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -152,6 +164,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastAirQualityTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"

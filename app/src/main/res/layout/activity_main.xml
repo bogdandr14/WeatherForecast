@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/idHomeRL"
+            android:id="@+id/idHomeLL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -27,7 +27,7 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/idLocationManager"
+                    android:id="@+id/idLocationManagerIV"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
@@ -49,7 +49,7 @@
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/idSettings"
+                    android:id="@+id/idSettingsIV"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_gravity="end"
@@ -79,7 +79,7 @@
                 android:visibility="gone" />
 
             <ImageView
-                android:id="@+id/idWeatherNowIcon"
+                android:id="@+id/idWeatherNowIV"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_below="@id/idTemperatureNowTV"
@@ -93,12 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/idWeatherNowIcon"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp"
                 android:gravity="center"
                 android:text="Sunny"
                 android:textAlignment="center"
@@ -107,7 +102,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/idHourlyWeatherText"
+            android:id="@+id/idHourlyWeatherTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -119,22 +114,22 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idHomeRL" />
+            app:layout_constraintTop_toBottomOf="@+id/idHomeLL" />
 
         <GridLayout
-            android:id="@+id/idDetailsGL"
+            android:id="@+id/idTodayDetailsGL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/today_details"
+            android:background="@drawable/card_today_details"
             android:columnCount="2"
             android:orientation="horizontal"
             android:padding="10dp"
             android:rowCount="4"
-            app:layout_constraintTop_toBottomOf="@id/idHourlyWeatherText">
+            app:layout_constraintTop_toBottomOf="@id/idHourlyWeatherTV">
 
             <TextView
+                android:id="@+id/idFeelsLikeTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -145,6 +140,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/idPressureTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -155,6 +151,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/idWindSpeedTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -165,6 +162,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/idWindDirectionTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -175,6 +173,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/idHumidityTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -185,6 +184,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/idCloudsTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -195,6 +195,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/idVisibilityTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -205,6 +206,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/idUvTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -217,7 +219,7 @@
         </GridLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/idWeatherRV"
+            android:id="@+id/idHourlyWeatherRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -225,20 +227,20 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idDetailsGL" />
+            app:layout_constraintTop_toBottomOf="@+id/idTodayDetailsGL" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/forecastMB"
+            android:id="@+id/idForecastMB"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="10dp"
-            android:backgroundTint="#078108"
+            android:backgroundTint="#4593ff"
             android:text="7-day Forecast"
             android:textColor="#fff"
             android:textSize="14sp"
             android:textStyle="bold"
             app:cornerRadius="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/idWeatherRV"
+            app:layout_constraintTop_toBottomOf="@+id/idHourlyWeatherRV"
             tools:layout_editor_absoluteX="7dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -1,13 +1,13 @@
 package com.cm.weatherforecast.modals;
 
-public class WeatherRVModal {
+public class HourlyWeatherRVModal {
 
     private String time;
     private String temperature;
     private String icon;
     private String windSpeed;
 
-    public WeatherRVModal(String time, String temperature, String icon, String windSpeed) {
+    public HourlyWeatherRVModal(String time, String temperature, String icon, String windSpeed) {
 
         this.time = time;
         this.temperature = temperature;

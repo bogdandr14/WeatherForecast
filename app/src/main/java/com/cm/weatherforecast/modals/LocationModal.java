@@ -1,5 +1,7 @@
 package com.cm.weatherforecast.modals;
 
+import android.content.Context;
+
 public class LocationModal {
     private String locationName;
     private String temperature;
