@@ -21,4 +21,6 @@
     <string name="mm">mm</string>
     <string name="inch">inch</string>
     <string name="apply_changes">Apply changes</string>
+    <string name="temp_now">35</string>
+    <string name="temp_unit">°C</string>
 </resources>

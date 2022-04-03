@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/idLayout"
                 android:gravity="center_horizontal"
-                android:text="35°C"
+                android:text="15°C"
                 android:textColor="@color/black"
                 android:textSize="70dp" />
 
@@ -135,7 +135,7 @@
                 android:layout_margin="8dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="Feels like: 36°C"
+                android:text="Feels like: 13°C"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 

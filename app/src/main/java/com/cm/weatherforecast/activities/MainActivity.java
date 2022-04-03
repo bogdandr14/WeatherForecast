@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cm.weatherforecast.R;
+import com.cm.weatherforecast.WeatherChecker;
 import com.cm.weatherforecast.adapters.HourlyWeatherRVAdapter;
 import com.cm.weatherforecast.modals.HourlyWeatherRVModal;
 import com.google.android.material.button.MaterialButton;
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
         setDummyHourlyWeather();
         setListeners();
+
+        new WeatherChecker(temperatureNowTV).execute(temperatureNowTV.getText().toString());
     }
 
     @Override
