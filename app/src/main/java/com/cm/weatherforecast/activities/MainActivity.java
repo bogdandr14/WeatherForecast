@@ -1,14 +1,20 @@
 package com.cm.weatherforecast.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cm.weatherforecast.R;
 import com.cm.weatherforecast.adapters.HourlyWeatherRVAdapter;
@@ -20,6 +26,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     public static final String CITY_NAME_MESSAGE = "CITY_NAME_MESSAGE";
     public static final int TEXT_REQUEST = 1;
+
+    public String cityName;
 
     private ProgressBar loadingPB;
     private ImageView settingsIV, locationManagerIV;
@@ -64,8 +72,57 @@ public class MainActivity extends AppCompatActivity {
         hourlyWeatherRV = findViewById(R.id.idHourlyWeatherRV);
         forecastMB = findViewById(R.id.idForecastMB);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                cityName= null;
+            } else {
+                cityName= extras.getString(CITY_NAME_MESSAGE);
+                cityNameTV.setText(cityName);
+            }
+        } else {
+            cityName= (String) savedInstanceState.getSerializable(CITY_NAME_MESSAGE);
+        }
+
         setDummyHourlyWeather();
         setListeners();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.idInterestLocationsI:
+                onOpenInterestLocationsActivity();
+                return true;
+            case R.id.idSettingsI:
+                onOpenSettingsActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onOpenForecastActivity() {
+        String message = cityNameTV.getText().toString();
+        Intent intent = new Intent(getApplicationContext(), ForecastActivity.class);
+        intent.putExtra(CITY_NAME_MESSAGE, message);
+        startActivity(intent);
+    }
+
+    private void onOpenSettingsActivity() {
+        startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
+    }
+
+    private void onOpenInterestLocationsActivity() {
+        startActivity(new Intent(getApplicationContext(),LocationManagerActivity.class));
     }
 
     @Override
@@ -101,24 +158,21 @@ public class MainActivity extends AppCompatActivity {
         forecastMB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message = cityNameTV.getText().toString();
-                Intent intent = new Intent(getApplicationContext(), ForecastActivity.class);
-                intent.putExtra(CITY_NAME_MESSAGE, message);
-                startActivity(intent);
+                onOpenForecastActivity();
             }
         });
 
         settingsIV.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
+                onOpenSettingsActivity();
             }
         });
 
         locationManagerIV.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                startActivityForResult(new Intent(getApplicationContext(),LocationManagerActivity.class), TEXT_REQUEST);
+                onOpenInterestLocationsActivity();
             }
         });
     }
