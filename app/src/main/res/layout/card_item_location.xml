@@ -35,7 +35,7 @@
             android:layout_marginHorizontal="4dp"
             android:layout_weight="2"
             android:gravity="start"
-            android:text="20*C"
+            android:text="20°C"
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="20sp" />
@@ -47,6 +47,7 @@
             android:layout_marginHorizontal="4dp"
             android:layout_weight="1"
             android:clickable="true"
+            android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="6dp"
             android:src="@drawable/ic_remove" />

@@ -2,6 +2,7 @@ package com.cm.weatherforecast.adapters;
 
 import static com.cm.weatherforecast.activities.MainActivity.CITY_NAME_MESSAGE;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -42,10 +43,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         return new LocationAdapter.ViewHolder(binding);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onBindViewHolder(@NonNull LocationAdapter.ViewHolder holder, int position) {
         LocationModal modal = locationModalArrayList.get(position);
-        holder.binding.idTemperatureTV.setText(modal.getTemperature() + "°C");
+        holder.binding.idTemperatureTV.setText(modal.getTemperature().concat("°C"));
         holder.binding.idLocationTV.setText(modal.getLocationName());
         holder.binding.idDeleteLocationIV.setOnClickListener(view -> {
             locationModalArrayList.remove(modal);

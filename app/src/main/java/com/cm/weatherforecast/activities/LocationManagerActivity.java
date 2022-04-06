@@ -1,9 +1,7 @@
 
 package com.cm.weatherforecast.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class LocationManagerActivity extends AppCompatActivity {
 
@@ -47,16 +46,13 @@ public class LocationManagerActivity extends AppCompatActivity {
     }
 
     private void setListener(){
-        cityAddIV.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                //TODO ADD CITY TO LIST
-                locationsList = locationAdapter.getLocationList();
-                locationsList.add(new LocationModal(citySearchTIET.getText().toString(), "35", "1.232", "32.42"));
-                locationAdapter = new LocationAdapter(getApplicationContext(), locationsList);
-                interestLocationsRV.setAdapter(locationAdapter);
-                Toast.makeText(getApplicationContext(), "add location", Toast.LENGTH_SHORT).show();
-            }
+        cityAddIV.setOnClickListener(view -> {
+            //TODO ADD CITY TO LIST
+            locationsList = locationAdapter.getLocationList();
+            locationsList.add(new LocationModal(Objects.requireNonNull(citySearchTIET.getText()).toString(), "35", "1.232", "32.42"));
+            locationAdapter = new LocationAdapter(getApplicationContext(), locationsList);
+            interestLocationsRV.setAdapter(locationAdapter);
+            Toast.makeText(getApplicationContext(), "add location", Toast.LENGTH_SHORT).show();
         });
 
     }

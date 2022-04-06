@@ -23,4 +23,10 @@
     <string name="apply_changes">Apply changes</string>
     <string name="temp_now">35</string>
     <string name="temp_unit">°C</string>
+    <string name="humidity">Humidity:</string>
+    <string name="visibility">\"Visibility: \"</string>
+    <string name="feels_like">\"Feels like: \"</string>
+    <string name="wind_direction">\"Wind Direction: \"</string>
+    <string name="clouds">\"Clouds: \"</string>
+    <string name="uv_index">\"UV Index: \"</string>
 </resources>

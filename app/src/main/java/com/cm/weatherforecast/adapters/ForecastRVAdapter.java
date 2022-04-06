@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class ForecastRVAdapter extends RecyclerView.Adapter<ForecastRVAdapter.ViewHolder> {
 
-    private Context context;
-    private ArrayList<DayRVModal> dayRVModalArrayList;
+    private final Context context;
+    private final ArrayList<DayRVModal> dayRVModalArrayList;
 
     public ForecastRVAdapter(Context context, ArrayList<DayRVModal> dayRVModalArrayList) {
         this.context = context;
@@ -27,7 +27,7 @@ public class ForecastRVAdapter extends RecyclerView.Adapter<ForecastRVAdapter.Vi
     @Override
     public ForecastRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.card_item_forecast, parent, false);
-        return new ForecastRVAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ForecastRVAdapter extends RecyclerView.Adapter<ForecastRVAdapter.Vi
         return dayRVModalArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
         }

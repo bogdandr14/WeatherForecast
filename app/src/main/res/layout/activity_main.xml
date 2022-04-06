@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/idHomeLL"
@@ -32,6 +32,7 @@
                     android:layout_height="46dp"
                     android:layout_weight="1"
                     android:clickable="true"
+                    android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="6dp"
                     android:src="@drawable/favorite" />

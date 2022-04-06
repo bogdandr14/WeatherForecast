@@ -22,8 +22,8 @@ import java.util.Date;
 
 public class HourlyWeatherRVAdapter extends RecyclerView.Adapter<HourlyWeatherRVAdapter.ViewHolder> {
 
-    private Context context;
-    private ArrayList<HourlyWeatherRVModal> hourlyWeatherRVModalArrayList;
+    private final Context context;
+    private final ArrayList<HourlyWeatherRVModal> hourlyWeatherRVModalArrayList;
 
     public HourlyWeatherRVAdapter(Context context, ArrayList<HourlyWeatherRVModal> hourlyWeatherRVModalArrayList) {
 
@@ -42,14 +42,15 @@ public class HourlyWeatherRVAdapter extends RecyclerView.Adapter<HourlyWeatherRV
     @Override
     public void onBindViewHolder(@NonNull HourlyWeatherRVAdapter.ViewHolder holder, int position) {
         HourlyWeatherRVModal modal = hourlyWeatherRVModalArrayList.get(position);
-        holder.tempretureTV.setText(modal.getTemperature()+"°C");
+        holder.temperatureTV.setText(modal.getTemperature().concat("°C"));
         RequestCreator v = Picasso.get().load("http://"+modal.getIcon());
         v.into(holder.weatherIV);
-        holder.windSpeedTV.setText(modal.getWindSpeed()+"Km/h");
+        holder.windSpeedTV.setText(modal.getWindSpeed().concat("Km/h"));
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
     try{
         Date t = input.parse(modal.getTime());
+        assert t != null;
         holder.timeTV.setText(output.format(t));
         }
     catch(ParseException e){
@@ -63,13 +64,13 @@ public class HourlyWeatherRVAdapter extends RecyclerView.Adapter<HourlyWeatherRV
         return hourlyWeatherRVModalArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView windSpeedTV, tempretureTV, timeTV;
-        private ImageView weatherIV;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView windSpeedTV, temperatureTV, timeTV;
+        private final ImageView weatherIV;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             timeTV = itemView.findViewById(R.id.idHourlyTimeTV);
-            tempretureTV = itemView.findViewById(R.id.idHourlyTemperatureTV);
+            temperatureTV = itemView.findViewById(R.id.idHourlyTemperatureTV);
             weatherIV = itemView.findViewById(R.id.idHourlyWeatherIV);
             windSpeedTV = itemView.findViewById(R.id.idHourlyWindSpeedTV);
 

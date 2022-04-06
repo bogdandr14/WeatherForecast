@@ -2,7 +2,6 @@ package com.cm.weatherforecast.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,12 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        binding.idSettingsBackMB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
-        });
+        binding.idSettingsBackMB.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), MainActivity.class)));
 
         binding.idCelsiusRB.setOnClickListener(view -> {
 

@@ -40,7 +40,8 @@
             android:layout_below="@id/idTemperatureNowTV"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:src="@drawable/sunny_weather_icon" />
+            android:src="@drawable/sunny_weather_icon"
+            android:contentDescription="weatherImg" />
 
         <TextView
             android:id="@+id/idForecastMinTempTV"

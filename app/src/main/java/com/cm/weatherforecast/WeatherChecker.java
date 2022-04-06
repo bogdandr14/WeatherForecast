@@ -7,7 +7,7 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 
 public class WeatherChecker extends AsyncTask<String, Void, String> {
-    private WeakReference<TextView> temperatureTV;
+    private final WeakReference<TextView> temperatureTV;
 
     public WeatherChecker(TextView tv) {
         temperatureTV = new WeakReference<>(tv);
@@ -22,15 +22,14 @@ public class WeatherChecker extends AsyncTask<String, Void, String> {
         String[] parts = temperature.split("°");
         int tempValue = 0;
         try{
-            int number = Integer.parseInt(parts[0]);
-            tempValue = number;
+            tempValue = Integer.parseInt(parts[0]);
         }
         catch (NumberFormatException ex){
             ex.printStackTrace();
         }
         while(runCheck) {
             tempValue++;
-            temperature = String.valueOf(tempValue) + "°C";
+            temperature = tempValue + "°C";
 
             temperatureTV.get().setText(temperature);
 
