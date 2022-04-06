@@ -30,6 +30,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.cm.weatherforecast.Constants;
+import com.cm.weatherforecast.PreferenceManager;
 import com.cm.weatherforecast.R;
 import com.cm.weatherforecast.WeatherChecker;
 import com.cm.weatherforecast.adapters.HourlyWeatherRVAdapter;
@@ -42,13 +44,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String CITY_NAME_MESSAGE = "CITY_NAME_MESSAGE";
-    public static final int TEXT_REQUEST = 1;
+    private PreferenceManager preferenceManager;
+
 
     public String cityName;
 
@@ -62,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<HourlyWeatherRVModal> hourlyWeatherListRVM;
     private HourlyWeatherRVAdapter weatherRVA;
     private LocationManager locationManager;
-    private final int PERMISSION_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,21 +73,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_main);
+        preferenceManager = new PreferenceManager(getApplicationContext());
 
         initializeElementsInActivity();
+        checkSettingsPreferences();
 
         hourlyWeatherListRVM = new ArrayList<>();
         weatherRVA = new HourlyWeatherRVAdapter(this, hourlyWeatherListRVM);
         hourlyWeatherRV.setAdapter(weatherRVA);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //getWeatherInfo("Craiova");
 
         checkSelectedCity(savedInstanceState);
-        //setDummyHourlyWeather();
         setListeners();
 
         //new WeatherChecker(temperatureNowTV).execute(temperatureNowTV.getText().toString());
+    }
+
+    private void checkSettingsPreferences() {
+        if (preferenceManager.getString(Constants.KEY_TEMP_MEASURE) == null) {
+            preferenceManager.putString(Constants.KEY_TEMP_MEASURE, Constants.TEMP_C);
+            preferenceManager.putString(Constants.KEY_PRESSURE_MEASURE, Constants.PRESSURE_IN);
+            preferenceManager.putString(Constants.KEY_VISIBILITY_MEASURE, Constants.VIS_KM);
+            preferenceManager.putString(Constants.KEY_WIND_MEASURE, Constants.WIND_KPH);
+            preferenceManager.putString(Constants.KEY_RAINFALL_MEASURE, Constants.PRECIP_MM);
+        }
     }
 
     private void checkSelectedCity(Bundle savedInstanceState) {
@@ -93,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
             if (extras == null) {
                 getCurrentLocation();
             } else {
-                cityName = extras.getString(CITY_NAME_MESSAGE);
+                cityName = extras.getString(Constants.CITY_NAME_MESSAGE);
                 cityNameTV.setText(cityName);
             }
         } else {
-            cityName = (String) savedInstanceState.getSerializable(CITY_NAME_MESSAGE);
+            cityName = (String) savedInstanceState.getSerializable(Constants.CITY_NAME_MESSAGE);
             cityNameTV.setText(cityName);
         }
         getWeatherInfo(cityName);
@@ -106,18 +119,11 @@ public class MainActivity extends AppCompatActivity {
     private void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_CODE);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.PERMISSION_CODE);
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         //cityName = getCityName(location.getLongitude(), location.getLatitude());
         cityName = "Craiova";
-    }
-
-    private void checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_CODE);
-        }
     }
 
     private void initializeElementsInActivity() {
@@ -196,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
     private void onOpenForecastActivity() {
         String message = cityNameTV.getText().toString();
         Intent intent = new Intent(getApplicationContext(), ForecastActivity.class);
-        intent.putExtra(CITY_NAME_MESSAGE, message);
+        intent.putExtra(Constants.CITY_NAME_MESSAGE, message);
         startActivity(intent);
     }
 
@@ -212,9 +218,9 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode,
                                  int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TEXT_REQUEST) {
+        if (requestCode == Constants.TEXT_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String cityName = data.getStringExtra(CITY_NAME_MESSAGE);
+                String cityName = data.getStringExtra(Constants.CITY_NAME_MESSAGE);
                 cityNameTV.setText(cityName);
                 //TODO use api to get info for the current CITY
             } else {
@@ -226,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_CODE) {
+        if (requestCode == Constants.PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permissions granted...", Toast.LENGTH_SHORT).show();
             } else {
@@ -254,8 +260,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setWeatherInfoNow(@NonNull JSONObject currentWeatherInfo) {
         try {
-            int temperature = currentWeatherInfo.getInt("temp_c");
-            temperatureNowTV.setText(String.valueOf(temperature).concat("°C"));
+            String tempMeasureKey = preferenceManager.getString(Constants.KEY_TEMP_MEASURE);
+            String tempSymbol = tempMeasureKey.equals(Constants.TEMP_C) ? " °C" : " °F";
+
+            int temperature = currentWeatherInfo.getInt(tempMeasureKey);
+            temperatureNowTV.setText(String.valueOf(temperature).concat(tempSymbol));
 
             String icon = currentWeatherInfo.getJSONObject("condition").getString("icon");
             Picasso.get().load("https:".concat(icon)).into(weatherNowIV);
@@ -271,29 +280,58 @@ public class MainActivity extends AppCompatActivity {
 //                        Picasso.get().load("").into(viewSV);
 //                    }
 
-            int feelsLike = currentWeatherInfo.getInt("feelslike_c");
-            feelsLikeTV.setText(getString(R.string.feels_like).concat(String.valueOf(feelsLike)).concat("°C"));
+            String feelsLikeKey = tempMeasureKey.equals(Constants.TEMP_C) ? Constants.FEELSLIKE_C : Constants.FEELSLIKE_F;
+            int feelsLike = currentWeatherInfo.getInt(feelsLikeKey);
+            feelsLikeTV.setText(getString(R.string.feels_like).concat(" " + String.valueOf(feelsLike)).concat(tempSymbol));
 
-            int windSpeed = currentWeatherInfo.getInt("wind_kph");
-            windSpeedTV.setText(getString(R.string.wind_speed).concat(String.valueOf(windSpeed)).concat("km/h"));
+            String windMeasureKey = preferenceManager.getString(Constants.KEY_WIND_MEASURE);
+            String windUnit = windMeasureKey.equals(Constants.WIND_KPH) ? " km/h" : " mph";
+            int windSpeed = currentWeatherInfo.getInt(windMeasureKey);
+            windSpeedTV.setText(getString(R.string.wind_speed).concat(" " + String.valueOf(windSpeed)).concat(windUnit));
 
             String humidity = currentWeatherInfo.getString("humidity");
-            humidityTV.setText(getString(R.string.humidity).concat(humidity).concat("%"));
+            humidityTV.setText(getString(R.string.humidity).concat(" " + humidity).concat(" %"));
 
-            int visibility = currentWeatherInfo.getInt("vis_km");
-            visibilityTV.setText(getString(R.string.visibility).concat(String.valueOf(visibility)).concat("km"));
+            String visibilityMeasureKey = preferenceManager.getString(Constants.KEY_VISIBILITY_MEASURE);
+            String visibilityUnit = windMeasureKey.equals(Constants.WIND_KPH) ? " km" : " miles";
+            int visibility = currentWeatherInfo.getInt(visibilityMeasureKey);
+            visibilityTV.setText(getString(R.string.visibility).concat(" " + String.valueOf(visibility)).concat(visibilityUnit));
 
-            int pressure = currentWeatherInfo.getInt("pressure_mb");
-            pressureTV.setText(getString(R.string.pressure).concat(String.valueOf(pressure)).concat("mb"));
+            String pressureMeasureKey = preferenceManager.getString(Constants.KEY_PRESSURE_MEASURE);
+            double pressure;
+            switch (pressureMeasureKey) {
+                case Constants.PRESSURE_MB:
+                    pressure = currentWeatherInfo.getDouble(Constants.PRESSURE_MB);
+                    pressureTV.setText(getString(R.string.pressure).concat(" " + Double.toString(pressure)).concat(" mb"));
+                    break;
+                case Constants.PRESSURE_IN:
+                    pressure = currentWeatherInfo.getDouble(Constants.PRESSURE_IN);
+                    pressureTV.setText(getString(R.string.pressure).concat(" " + Double.toString(pressure)).concat(" in"));
+                    break;
+                case Constants.PRESSURE_ATM:
+                    pressure = currentWeatherInfo.getDouble(Constants.PRESSURE_MB);
+                    pressure = BigDecimal.valueOf(pressure * 0.000987)
+                            .setScale(3, RoundingMode.HALF_UP)
+                            .doubleValue();
+                    pressureTV.setText(getString(R.string.pressure).concat(" " + Double.toString(pressure)).concat(" atm"));
+                    break;
+                case Constants.PRESSURE_PSI:
+                    pressure = currentWeatherInfo.getDouble(Constants.PRESSURE_IN);
+                    pressure = BigDecimal.valueOf(pressure / 2.036)
+                            .setScale(3, RoundingMode.HALF_UP)
+                            .doubleValue();
+                    pressureTV.setText(getString(R.string.pressure).concat(" " + Double.toString(pressure)).concat(" psi"));
+                    break;
+            }
 
             String windDirection = currentWeatherInfo.getString("wind_dir");
-            windDirectionTV.setText(getString(R.string.wind_direction).concat(windDirection));
+            windDirectionTV.setText(getString(R.string.wind_direction).concat(" " + windDirection));
 
             String nebulosity = currentWeatherInfo.getString("cloud");
-            cloudsTV.setText(getString(R.string.clouds).concat(nebulosity).concat("%"));
+            cloudsTV.setText(getString(R.string.clouds).concat(" " + nebulosity).concat(" %"));
 
             int uvIndex = currentWeatherInfo.getInt("uv");
-            uvTV.setText(getString(R.string.uv_index).concat(String.valueOf(uvIndex)));
+            uvTV.setText(getString(R.string.uv_index).concat(" " + String.valueOf(uvIndex)));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -304,26 +342,21 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void setHourlyWeather(JSONArray hourlyWeatherInfo) {
         hourlyWeatherListRVM.clear();
+        String tempMeasureKey = preferenceManager.getString(Constants.KEY_TEMP_MEASURE);
+        String tempSymbol = tempMeasureKey.equals(Constants.TEMP_C) ? "°C" : "°F";
+        String windMeasureKey = preferenceManager.getString(Constants.KEY_WIND_MEASURE);
+        String windUnit = windMeasureKey.equals(Constants.WIND_KPH) ? "km/h" : "mph";
         try {
             for (int i = 0; i < hourlyWeatherInfo.length(); ++i) {
                 JSONObject hourObj = hourlyWeatherInfo.getJSONObject(i);
                 String time = hourObj.getString("time");
-                String temperature = hourObj.getString("temp_c");
+                String temperature = hourObj.getString(tempMeasureKey).concat(tempSymbol);
                 String image = hourObj.getJSONObject("condition").getString("icon");
-                String windSpeed =hourObj.getString("wind_kph");
+                String windSpeed = hourObj.getString(windMeasureKey).concat(" " + windUnit);
                 hourlyWeatherListRVM.add(new HourlyWeatherRVModal(time, temperature, image, windSpeed));
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        weatherRVA.notifyDataSetChanged();
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void setDummyHourlyWeather() {
-        hourlyWeatherListRVM.clear();
-        for (int i = 0; i < 24; i++) {
-            hourlyWeatherListRVM.add(new HourlyWeatherRVModal("2001-01-01 " + (i < 10 ? "0" : "") + i + ":00", "35", "cdn.weatherapi.com/weather/64x64/day/122.png", String.valueOf(i)));
         }
         weatherRVA.notifyDataSetChanged();
     }

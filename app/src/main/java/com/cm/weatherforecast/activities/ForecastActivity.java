@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.cm.weatherforecast.Constants;
 import com.cm.weatherforecast.R;
 import com.cm.weatherforecast.adapters.ForecastRVAdapter;
 import com.cm.weatherforecast.modals.DayRVModal;
@@ -24,7 +25,7 @@ public class ForecastActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forecast);
         sevenDayForecastRV = findViewById(R.id.id7DayForecastRV);
         Intent intent = getIntent();
-        String cityName = intent.getStringExtra(MainActivity.CITY_NAME_MESSAGE);
+        String cityName = intent.getStringExtra(Constants.CITY_NAME_MESSAGE);
 
         //use cityName to make api call for 7-day forecast
         setDummyDayWeather();

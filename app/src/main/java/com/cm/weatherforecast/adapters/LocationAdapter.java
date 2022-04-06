@@ -1,6 +1,5 @@
 package com.cm.weatherforecast.adapters;
 
-import static com.cm.weatherforecast.activities.MainActivity.CITY_NAME_MESSAGE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cm.weatherforecast.Constants;
 import com.cm.weatherforecast.activities.MainActivity;
 import com.cm.weatherforecast.databinding.CardItemLocationBinding;
 import com.cm.weatherforecast.modals.LocationModal;
@@ -81,7 +81,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             view.setBackgroundColor(0xf3342);
             String reply = binding.idLocationTV.getText().toString();
             Intent replyIntent = new Intent(context, MainActivity.class);
-            replyIntent.putExtra(CITY_NAME_MESSAGE, reply);
+            replyIntent.putExtra(Constants.CITY_NAME_MESSAGE, reply);
             context.startActivity(replyIntent);
         }
     }

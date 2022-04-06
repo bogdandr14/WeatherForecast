@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class HourlyWeatherRVAdapter extends RecyclerView.Adapter<HourlyWeatherRVAdapter.ViewHolder> {
 
@@ -42,12 +43,12 @@ public class HourlyWeatherRVAdapter extends RecyclerView.Adapter<HourlyWeatherRV
     @Override
     public void onBindViewHolder(@NonNull HourlyWeatherRVAdapter.ViewHolder holder, int position) {
         HourlyWeatherRVModal modal = hourlyWeatherRVModalArrayList.get(position);
-        holder.temperatureTV.setText(modal.getTemperature().concat("°C"));
+        holder.temperatureTV.setText(modal.getTemperature());
         RequestCreator v = Picasso.get().load("https://" + modal.getIcon());
         v.into(holder.weatherIV);
-        holder.windSpeedTV.setText(modal.getWindSpeed().concat("Km/h"));
-        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
+        holder.windSpeedTV.setText(modal.getWindSpeed());
+        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ENGLISH);
+        SimpleDateFormat output = new SimpleDateFormat("hh:mm aa",  Locale.ENGLISH);
         try {
             Date t = input.parse(modal.getTime());
             assert t != null;
