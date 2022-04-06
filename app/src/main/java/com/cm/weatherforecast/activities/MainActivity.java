@@ -37,6 +37,7 @@ import com.cm.weatherforecast.WeatherChecker;
 import com.cm.weatherforecast.adapters.HourlyWeatherRVAdapter;
 import com.cm.weatherforecast.modals.HourlyWeatherRVModal;
 import com.google.android.material.button.MaterialButton;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -103,10 +104,10 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED ){
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_CODE);
         }
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        cityName = getCityName(location.getLongitude(), location.getLatitude());
-        getWeatherInfo(cityName);
-        cityNameTV.setText(cityName);
+        //Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        //cityName = getCityName(location.getLongitude(), location.getLatitude());
+        getWeatherInfo("Craiova");
+        //cityNameTV.setText(cityName);
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getWeatherInfo(String cityName) {
-        String url = "http://api.weatherapi.com/v1/forecast.json?key=244e95839e83453bb05122307222002&q=" + cityName +"&days=7&aqi=yes&alerts=yes";
+        String url = "https://api.weatherapi.com/v1/forecast.json?key=244e95839e83453bb05122307222002&q=" + cityName +"&days=7&aqi=yes&alerts=yes";
         cityNameTV.setText(cityName);
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -223,8 +224,46 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 loadingPB.setVisibility(View.GONE);
                 try {
-                    String temperature = response.getJSONObject("current").getString("temp_c");
-                    temperatureNowTV.setText(temperature +"C");
+                    int temperature = response.getJSONObject("current").getInt("temp_c");
+                    temperatureNowTV.setText(temperature + "°C");
+
+                    String icon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
+                    Picasso.get().load("https:".concat(icon)).into(weatherNowIV);
+
+                    String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
+                    conditionNowTV.setText(condition);
+
+                    //Bg image 1:02:05
+//                    int isDay = response.getJSONObject("current").getInt("id_day");
+//                    if (isDay == 1) {
+//                        Picasso.get().load("").into(viewSV);
+//                    } else {
+//                        Picasso.get().load("").into(viewSV);
+//                    }
+
+                    int feelsLike = response.getJSONObject("current").getInt("feelslike_c");
+                    feelsLikeTV.setText("Feels like: " + feelsLike + "°C");
+
+                    int windSpeed = response.getJSONObject("current").getInt("wind_kph");
+                    windSpeedTV.setText("Wind Speed: " + windSpeed + "km/h");
+
+                    String humidity = response.getJSONObject("current").getString("humidity");
+                    humidityTV.setText("Humidity: " + humidity + "%");
+
+                    int visibility = response.getJSONObject("current").getInt("vis_km");
+                    visibilityTV.setText("Visibility: " + visibility + "km");
+
+                    int pressure = response.getJSONObject("current").getInt("pressure_mb");
+                    pressureTV.setText("Pressure: " + pressure +"mb");
+
+                    String windDirection = response.getJSONObject("current").getString("wind_dir");
+                    windDirectionTV.setText("Wind Direction: " + windDirection);
+
+                    String nebulosity = response.getJSONObject("current").getString("cloud");
+                    cloudsTV.setText("Clouds: " + nebulosity + "%");
+
+                    int uvIndex = response.getJSONObject("current").getInt("uv");
+                    uvTV.setText("UV Index: " + uvIndex);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

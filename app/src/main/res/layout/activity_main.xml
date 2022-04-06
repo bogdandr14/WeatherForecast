@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/idLayout"
                 android:gravity="center_horizontal"
-                android:text="15°C"
+                android:text="35°C"
                 android:textColor="@color/black"
                 android:textSize="70dp" />
 
