@@ -43,19 +43,18 @@ public class HourlyWeatherRVAdapter extends RecyclerView.Adapter<HourlyWeatherRV
     public void onBindViewHolder(@NonNull HourlyWeatherRVAdapter.ViewHolder holder, int position) {
         HourlyWeatherRVModal modal = hourlyWeatherRVModalArrayList.get(position);
         holder.temperatureTV.setText(modal.getTemperature().concat("°C"));
-        RequestCreator v = Picasso.get().load("http://"+modal.getIcon());
+        RequestCreator v = Picasso.get().load("https://" + modal.getIcon());
         v.into(holder.weatherIV);
         holder.windSpeedTV.setText(modal.getWindSpeed().concat("Km/h"));
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
-    try{
-        Date t = input.parse(modal.getTime());
-        assert t != null;
-        holder.timeTV.setText(output.format(t));
+        try {
+            Date t = input.parse(modal.getTime());
+            assert t != null;
+            holder.timeTV.setText(output.format(t));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-    catch(ParseException e){
-        e.printStackTrace();
-    }
     }
 
     @Override
@@ -67,6 +66,7 @@ public class HourlyWeatherRVAdapter extends RecyclerView.Adapter<HourlyWeatherRV
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView windSpeedTV, temperatureTV, timeTV;
         private final ImageView weatherIV;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             timeTV = itemView.findViewById(R.id.idHourlyTimeTV);

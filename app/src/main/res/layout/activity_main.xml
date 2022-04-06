@@ -79,6 +79,7 @@
                 android:layout_gravity="center"
                 android:visibility="gone" />
 
+
             <ImageView
                 android:id="@+id/idWeatherNowIV"
                 android:layout_width="100dp"
@@ -87,7 +88,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:src="@drawable/sunny_weather_icon" />
-
 
             <TextView
                 android:id="@+id/idConditionNowTV"

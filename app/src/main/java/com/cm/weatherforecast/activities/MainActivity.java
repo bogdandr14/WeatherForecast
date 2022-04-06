@@ -72,20 +72,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initializeElementsInActivity();
-        checkPermissions();
 
         hourlyWeatherListRVM = new ArrayList<>();
         weatherRVA = new HourlyWeatherRVAdapter(this, hourlyWeatherListRVM);
         hourlyWeatherRV.setAdapter(weatherRVA);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        getWeatherInfo("Craiova");
+        //getWeatherInfo("Craiova");
 
         checkSelectedCity(savedInstanceState);
-        setDummyHourlyWeather();
+        //setDummyHourlyWeather();
         setListeners();
 
-        new WeatherChecker(temperatureNowTV).execute(temperatureNowTV.getText().toString());
+        //new WeatherChecker(temperatureNowTV).execute(temperatureNowTV.getText().toString());
     }
 
     private void checkSelectedCity(Bundle savedInstanceState) {
@@ -110,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_CODE);
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        cityName = getCityName(location.getLongitude(), location.getLatitude());
+        //cityName = getCityName(location.getLongitude(), location.getLatitude());
+        cityName = "Craiova";
     }
 
     private void checkPermissions() {
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             loadingPB.setVisibility(View.GONE);
             try {
                 setWeatherInfoNow(response.getJSONObject("current"));
-                setHourlyWeather(response.getJSONArray("forecast").getJSONObject(0).getJSONArray("hour"));
+                setHourlyWeather(response.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour"));
 
             } catch (JSONException e) {
                 e.printStackTrace();
