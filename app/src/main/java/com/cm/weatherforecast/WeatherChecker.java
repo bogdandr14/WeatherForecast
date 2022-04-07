@@ -1,38 +1,46 @@
 package com.cm.weatherforecast;
 
 import android.os.AsyncTask;
-import android.widget.TextView;
+import android.util.Log;
+import android.widget.Toast;
 
 
-import java.lang.ref.WeakReference;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 public class WeatherChecker extends AsyncTask<String, Void, String> {
-    private final WeakReference<TextView> temperatureTV;
 
-    public WeatherChecker(TextView tv) {
-        temperatureTV = new WeakReference<>(tv);
+    private JSONObject weatherResponse;
+    private BaseWeatherActivity weatherActivity;
+    private boolean runCheck;
+
+    public WeatherChecker(BaseWeatherActivity weatherActivity) {
+        this.weatherActivity = weatherActivity;
     }
 
     @Override
     protected String doInBackground(String... params) {
-        int s = 6000;
-        boolean runCheck = true;
-        String temperature = params[0];
+        int s = 60000;
+        runCheck = true;
+        String cityName = params[0];
+        String endLink = params[1];
 
-        String[] parts = temperature.split("°");
-        int tempValue = 0;
-        try{
-            tempValue = Integer.parseInt(parts[0]);
-        }
-        catch (NumberFormatException ex){
-            ex.printStackTrace();
-        }
-        while(runCheck) {
-            tempValue++;
-            temperature = tempValue + "°C";
+        String url = Constants.WEATHER_API_LINK_START + cityName + endLink;
+        RequestQueue requestQueue = Volley.newRequestQueue(weatherActivity);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            this.weatherResponse = response;
+            Log.d("TAG", "CALL COMPLETED");
+            if (runCheck) {
+                this.weatherActivity.setWeatherInfo(response);
+            }
+        }, error -> Toast.makeText(weatherActivity, weatherActivity.getString(R.string.enter_valid_city), Toast.LENGTH_SHORT).show());
 
-            temperatureTV.get().setText(temperature);
-
+        while (runCheck) {
+            requestQueue.add(jsonObjectRequest);
             try {
                 Thread.sleep(s);
             } catch (InterruptedException e) {
@@ -40,10 +48,13 @@ public class WeatherChecker extends AsyncTask<String, Void, String> {
             }
         }
 
-        return temperature;
+        return this.weatherResponse.toString();
+    }
+
+    public void interruptCheck() {
+        this.runCheck = false;
     }
 
     protected void onPostExecute(String result) {
-        temperatureTV.get().setText(result);
     }
 }

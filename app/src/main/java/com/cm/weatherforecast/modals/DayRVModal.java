@@ -5,6 +5,9 @@ public class DayRVModal {
     private String latitude;
     private String longitude;
 
+    public DayRVModal(){
+
+    }
     public DayRVModal(String cityName, String latitude, String longitude) {
         this.cityName = cityName;
         this.latitude = latitude;

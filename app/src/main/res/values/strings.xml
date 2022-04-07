@@ -29,4 +29,8 @@
     <string name="wind_direction">Wind Direction: </string>
     <string name="clouds">Clouds: </string>
     <string name="uv_index">UV Index: </string>
+    <string name="city_not_found">City not found…</string>
+    <string name="permission_granted">Permissions granted!</string>
+    <string name="provide_permission">Please provide the permissions…</string>
+    <string name="enter_valid_city">Please enter valid city name</string>
 </resources>

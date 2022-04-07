@@ -1,7 +1,6 @@
 package com.cm.weatherforecast.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,17 +18,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.cm.weatherforecast.BaseWeatherActivity;
 import com.cm.weatherforecast.Constants;
 import com.cm.weatherforecast.PreferenceManager;
 import com.cm.weatherforecast.R;
@@ -50,9 +45,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseWeatherActivity {
     private PreferenceManager preferenceManager;
-
+    private WeatherChecker weatherChecker;
 
     public String cityName;
 
@@ -84,10 +79,11 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        checkSelectedCity(savedInstanceState);
+        cityName = getSelectedCity(savedInstanceState);
         setListeners();
 
-        //new WeatherChecker(temperatureNowTV).execute(temperatureNowTV.getText().toString());
+        weatherChecker = new WeatherChecker(this);
+        weatherChecker.execute(cityName, Constants.WEATHER_API_LINK_TODAY);
     }
 
     private void checkSettingsPreferences() {
@@ -100,30 +96,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkSelectedCity(Bundle savedInstanceState) {
+    private String getSelectedCity(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
-                getCurrentLocation();
+                return getCurrentLocation();
             } else {
-                cityName = extras.getString(Constants.CITY_NAME_MESSAGE);
-                cityNameTV.setText(cityName);
+                return extras.getString(Constants.CITY_NAME_MESSAGE);
             }
         } else {
-            cityName = (String) savedInstanceState.getSerializable(Constants.CITY_NAME_MESSAGE);
-            cityNameTV.setText(cityName);
+            return (String) savedInstanceState.getSerializable(Constants.CITY_NAME_MESSAGE);
         }
-        getWeatherInfo(cityName);
     }
 
-    private void getCurrentLocation() {
+    private String getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.PERMISSION_CODE);
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        //cityName = getCityName(location.getLongitude(), location.getLatitude());
-        cityName = "Craiova";
+        //return getCityName(location.getLongitude(), location.getLatitude());
+        return Constants.CITY;
     }
 
     private void initializeElementsInActivity() {
@@ -154,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
         forecastMB = findViewById(R.id.idForecastMB);
     }
 
-    private String getCityName(double longitude, double latitude) {
-        String cityName = "Not found";
+    private String getLocationCityName(double longitude, double latitude) {
+        String cityName = getString(R.string.city_not_found);
         Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
         try {
             List<Address> addresses = gcd.getFromLocation(latitude, longitude, 10);
@@ -165,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
                     if (city != null && !city.equals("")) {
                         cityName = city;
                     } else {
-                        Log.d("TAG", "CITY NOT FOUND");
-                        Toast.makeText(this, "User City Not Found...", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", getString(R.string.city_not_found));
+                        Toast.makeText(this, getString(R.string.city_not_found), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -200,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onOpenForecastActivity() {
+        weatherChecker.interruptCheck();
         String message = cityNameTV.getText().toString();
         Intent intent = new Intent(getApplicationContext(), ForecastActivity.class);
         intent.putExtra(Constants.CITY_NAME_MESSAGE, message);
@@ -207,10 +201,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onOpenSettingsActivity() {
+        weatherChecker.interruptCheck();
         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
     }
 
     private void onOpenInterestLocationsActivity() {
+        weatherChecker.interruptCheck();
         startActivity(new Intent(getApplicationContext(), LocationManagerActivity.class));
     }
 
@@ -234,31 +230,26 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constants.PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permissions granted...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Please provide the permissions", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.provide_permission), Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
 
-    private void getWeatherInfo(String cityName) {
-        String url = "https://api.weatherapi.com/v1/forecast.json?key=244e95839e83453bb05122307222002&q=" + cityName + "&days=7&aqi=yes&alerts=yes";
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
-            loadingPB.setVisibility(View.GONE);
-            try {
-                setWeatherInfoNow(response.getJSONObject("current"));
-                setHourlyWeather(response.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour"));
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }, error -> Toast.makeText(MainActivity.this, "Please enter valid city name", Toast.LENGTH_SHORT).show());
-        requestQueue.add(jsonObjectRequest);
+    @Override
+    public void setWeatherInfo(JSONObject weatherInfo) {
+        try {
+            cityNameTV.setText(weatherInfo.getJSONObject(Constants.LOCATION).getString(Constants.NAME));
+            setWeatherInfoNow(weatherInfo.getJSONObject(Constants.CURRENT));
+            setHourlyWeather(weatherInfo.getJSONObject(Constants.FORECAST).getJSONArray(Constants.FORECASTDAY).getJSONObject(0).getJSONArray(Constants.HOUR));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void setWeatherInfoNow(@NonNull JSONObject currentWeatherInfo) {
+    public void setWeatherInfoNow(@NonNull JSONObject currentWeatherInfo) {
         try {
             String tempMeasureKey = preferenceManager.getString(Constants.KEY_TEMP_MEASURE);
             String tempSymbol = tempMeasureKey.equals(Constants.TEMP_C) ? " °C" : " °F";
@@ -266,10 +257,10 @@ public class MainActivity extends AppCompatActivity {
             int temperature = currentWeatherInfo.getInt(tempMeasureKey);
             temperatureNowTV.setText(String.valueOf(temperature).concat(tempSymbol));
 
-            String icon = currentWeatherInfo.getJSONObject("condition").getString("icon");
+            String icon = currentWeatherInfo.getJSONObject(Constants.CONDITION).getString(Constants.ICON);
             Picasso.get().load("https:".concat(icon)).into(weatherNowIV);
 
-            String condition = currentWeatherInfo.getJSONObject("condition").getString("text");
+            String condition = currentWeatherInfo.getJSONObject(Constants.CONDITION).getString(Constants.TEXT);
             conditionNowTV.setText(condition);
 
             //Bg image 1:02:05
@@ -282,56 +273,59 @@ public class MainActivity extends AppCompatActivity {
 
             String feelsLikeKey = tempMeasureKey.equals(Constants.TEMP_C) ? Constants.FEELSLIKE_C : Constants.FEELSLIKE_F;
             int feelsLike = currentWeatherInfo.getInt(feelsLikeKey);
-            feelsLikeTV.setText(getString(R.string.feels_like).concat(" " + String.valueOf(feelsLike)).concat(tempSymbol));
+            feelsLikeTV.setText(getString(R.string.feels_like).concat(" " + feelsLike).concat(tempSymbol));
 
             String windMeasureKey = preferenceManager.getString(Constants.KEY_WIND_MEASURE);
             String windUnit = windMeasureKey.equals(Constants.WIND_KPH) ? " km/h" : " mph";
             int windSpeed = currentWeatherInfo.getInt(windMeasureKey);
-            windSpeedTV.setText(getString(R.string.wind_speed).concat(" " + String.valueOf(windSpeed)).concat(windUnit));
+            windSpeedTV.setText(getString(R.string.wind_speed).concat(" " + windSpeed).concat(windUnit));
 
-            String humidity = currentWeatherInfo.getString("humidity");
+            String humidity = currentWeatherInfo.getString(Constants.HUMIDITY);
             humidityTV.setText(getString(R.string.humidity).concat(" " + humidity).concat(" %"));
 
             String visibilityMeasureKey = preferenceManager.getString(Constants.KEY_VISIBILITY_MEASURE);
-            String visibilityUnit = windMeasureKey.equals(Constants.WIND_KPH) ? " km" : " miles";
+            String visibilityUnit = windMeasureKey.equals(Constants.VIS_KM) ? " km" : " miles";
             int visibility = currentWeatherInfo.getInt(visibilityMeasureKey);
-            visibilityTV.setText(getString(R.string.visibility).concat(" " + String.valueOf(visibility)).concat(visibilityUnit));
+            visibilityTV.setText(getString(R.string.visibility).concat(" " + visibility).concat(visibilityUnit));
 
             String pressureMeasureKey = preferenceManager.getString(Constants.KEY_PRESSURE_MEASURE);
             double pressure;
             switch (pressureMeasureKey) {
                 case Constants.PRESSURE_MB:
                     pressure = currentWeatherInfo.getDouble(Constants.PRESSURE_MB);
-                    pressureTV.setText(getString(R.string.pressure).concat(" " + Double.toString(pressure)).concat(" mb"));
+                    pressureTV.setText(getString(R.string.pressure).concat(" " + pressure).concat(" mb"));
                     break;
                 case Constants.PRESSURE_IN:
                     pressure = currentWeatherInfo.getDouble(Constants.PRESSURE_IN);
-                    pressureTV.setText(getString(R.string.pressure).concat(" " + Double.toString(pressure)).concat(" in"));
+                    pressure = BigDecimal.valueOf(pressure * 25.4)
+                            .setScale(3, RoundingMode.HALF_UP)
+                            .doubleValue();
+                    pressureTV.setText(getString(R.string.pressure).concat(" " + pressure).concat(" mmHg"));
                     break;
                 case Constants.PRESSURE_ATM:
                     pressure = currentWeatherInfo.getDouble(Constants.PRESSURE_MB);
                     pressure = BigDecimal.valueOf(pressure * 0.000987)
                             .setScale(3, RoundingMode.HALF_UP)
                             .doubleValue();
-                    pressureTV.setText(getString(R.string.pressure).concat(" " + Double.toString(pressure)).concat(" atm"));
+                    pressureTV.setText(getString(R.string.pressure).concat(" " + pressure).concat(" atm"));
                     break;
                 case Constants.PRESSURE_PSI:
                     pressure = currentWeatherInfo.getDouble(Constants.PRESSURE_IN);
                     pressure = BigDecimal.valueOf(pressure / 2.036)
                             .setScale(3, RoundingMode.HALF_UP)
                             .doubleValue();
-                    pressureTV.setText(getString(R.string.pressure).concat(" " + Double.toString(pressure)).concat(" psi"));
+                    pressureTV.setText(getString(R.string.pressure).concat(" " + pressure).concat(" psi"));
                     break;
             }
 
-            String windDirection = currentWeatherInfo.getString("wind_dir");
+            String windDirection = currentWeatherInfo.getString(Constants.WIND_DIR);
             windDirectionTV.setText(getString(R.string.wind_direction).concat(" " + windDirection));
 
-            String nebulosity = currentWeatherInfo.getString("cloud");
+            String nebulosity = currentWeatherInfo.getString(Constants.CLOUD);
             cloudsTV.setText(getString(R.string.clouds).concat(" " + nebulosity).concat(" %"));
 
-            int uvIndex = currentWeatherInfo.getInt("uv");
-            uvTV.setText(getString(R.string.uv_index).concat(" " + String.valueOf(uvIndex)));
+            int uvIndex = currentWeatherInfo.getInt(Constants.UV);
+            uvTV.setText(getString(R.string.uv_index).concat(" " + uvIndex));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -349,9 +343,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             for (int i = 0; i < hourlyWeatherInfo.length(); ++i) {
                 JSONObject hourObj = hourlyWeatherInfo.getJSONObject(i);
-                String time = hourObj.getString("time");
+                String time = hourObj.getString(Constants.TIME);
                 String temperature = hourObj.getString(tempMeasureKey).concat(tempSymbol);
-                String image = hourObj.getJSONObject("condition").getString("icon");
+                String image = hourObj.getJSONObject(Constants.CONDITION).getString(Constants.ICON);
                 String windSpeed = hourObj.getString(windMeasureKey).concat(" " + windUnit);
                 hourlyWeatherListRVM.add(new HourlyWeatherRVModal(time, temperature, image, windSpeed));
             }

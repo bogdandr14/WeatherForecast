@@ -5,14 +5,10 @@ import android.content.Context;
 public class LocationModal {
     private String locationName;
     private String temperature;
-    private String latitude;
-    private String longitude;
 
-    public LocationModal(String locationName, String temperature, String latitude, String longitude) {
+    public LocationModal(String locationName, String temperature) {
         this.locationName = locationName;
         this.temperature = temperature;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
     public String getLocationName() {
@@ -30,21 +26,4 @@ public class LocationModal {
     public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
 }
