@@ -24,7 +24,7 @@ public class WeatherChecker extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        int s = 60000;
+        int s = 1000;
         runCheck = true;
         String cityName = params[0];
         String endLink = params[1];
@@ -41,10 +41,15 @@ public class WeatherChecker extends AsyncTask<String, Void, String> {
 
         while (runCheck) {
             requestQueue.add(jsonObjectRequest);
-            try {
-                Thread.sleep(s);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            for(int i = 0; i< 6; ++i){
+                if(!runCheck){
+                    break;
+                }
+                try {
+                    Thread.sleep(s);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

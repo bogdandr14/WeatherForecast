@@ -37,21 +37,19 @@ public class ForecastRVAdapter extends RecyclerView.Adapter<ForecastRVAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ForecastRVAdapter.ViewHolder holder, int position) {
         DayRVModal modal = dayRVModalArrayList.get(position);
-        holder.forecastDayTV.setText(modal.getDateAndDescription());
+        holder.forecastDayTV.setText(modal.getDate().concat(",\n"+modal.getDescription()));
         RequestCreator v = Picasso.get().load("https://" + modal.getIcon());
         v.into(holder.forecastWeatherIV);
         holder.forecastMinTempTV.setText(modal.getMinTemp());
         holder.forecastMaxTempTV.setText(modal.getMaxTemp());
         holder.forecastWindSpeedTV.setText(modal.getWindSpeed());
-        holder.forecastWindDirectionTV.setText(modal.getWindDirection());
         holder.forecastHumidityTV.setText(modal.getHumidity());
-        holder.forecastPressureTV.setText(modal.getPressure());
         holder.forecastRainfallChanceTV.setText(modal.getRainfallChance());
         holder.forecastRainfallQuantityTV.setText(modal.getRainfallQuantity());
         holder.forecastDawnTV.setText(modal.getDawnTime());
         holder.forecastDuskTV.setText(modal.getDuskTime());
+        holder.forecastVisibilityTV.setText(modal.getVisibility());
         holder.forecastMoonPhaseTV.setText(modal.getMoonPhase());
-        holder.forecastUVTV.setText(modal.getAirQuality());
     }
 
     @Override
@@ -61,9 +59,9 @@ public class ForecastRVAdapter extends RecyclerView.Adapter<ForecastRVAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView forecastDayTV, forecastMinTempTV, forecastMaxTempTV,
-                forecastWindSpeedTV, forecastWindDirectionTV, forecastHumidityTV,
-                forecastPressureTV, forecastRainfallChanceTV, forecastRainfallQuantityTV,
-                forecastDawnTV, forecastDuskTV, forecastMoonPhaseTV, forecastUVTV;
+                forecastWindSpeedTV, forecastHumidityTV,
+                 forecastRainfallChanceTV, forecastRainfallQuantityTV,
+                forecastDawnTV, forecastDuskTV,forecastVisibilityTV, forecastMoonPhaseTV;
         private final ImageView forecastWeatherIV;
 
         public ViewHolder(@NonNull View itemView) {
@@ -72,15 +70,13 @@ public class ForecastRVAdapter extends RecyclerView.Adapter<ForecastRVAdapter.Vi
             forecastMinTempTV = itemView.findViewById(R.id.idForecastMinTempTV);
             forecastMaxTempTV = itemView.findViewById(R.id.idForecastMaxTempTV);
             forecastWindSpeedTV = itemView.findViewById(R.id.idForecastWindSpeedTV);
-            forecastWindDirectionTV = itemView.findViewById(R.id.idForecastWindDirectionTV);
             forecastHumidityTV = itemView.findViewById(R.id.idForecastHumidityTV);
-            forecastPressureTV = itemView.findViewById(R.id.idForecastPressureTV);
             forecastRainfallChanceTV = itemView.findViewById(R.id.idForecastRainfallChanceTV);
             forecastRainfallQuantityTV = itemView.findViewById(R.id.idForecastRainfallQuantityTV);
             forecastDawnTV = itemView.findViewById(R.id.idForecastDawnTV);
             forecastDuskTV = itemView.findViewById(R.id.idForecastDuskTV);
+            forecastVisibilityTV = itemView.findViewById(R.id.idForecastVisibilityTV);
             forecastMoonPhaseTV = itemView.findViewById(R.id.idForecastMoonPhaseTV);
-            forecastUVTV = itemView.findViewById(R.id.idUvTV);
             forecastWeatherIV = itemView.findViewById(R.id.idForecastWeatherIV);
         }
     }

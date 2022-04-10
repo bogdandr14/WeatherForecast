@@ -1,51 +1,57 @@
 package com.cm.weatherforecast.modals;
 
 public class DayRVModal {
-    private String dateAndDescription;
+    private String date;
+    private String description;
     private String icon;
     private String minTemp;
     private String maxTemp;
     private String windSpeed;
-    private String windDirection;
     private String humidity;
-    private String pressure;
     private String rainfallChance;
     private String rainfallQuantity;
     private String dawnTime;
     private String duskTime;
     private String moonPhase;
-    private String airQuality;
+    private String visibility;
 
-    public DayRVModal(){
+    public DayRVModal() {
 
     }
 
-    public DayRVModal(String dateAndDescription, String icon, String minTemp, String maxTemp,
-                      String windSpeed, String windDirection, String humidity, String pressure,
+    public DayRVModal(String dateAndDescription, String description, String icon, String minTemp, String maxTemp,
+                      String windSpeed, String humidity,
                       String rainfallChance, String rainfallQuantity, String dawnTime,
-                      String duskTime, String moonPhase, String airQuality) {
-        this.dateAndDescription = dateAndDescription;
+                      String duskTime, String visibility, String moonPhase) {
+        this.date = dateAndDescription;
+        this.description = description;
         this.icon = icon;
         this.minTemp = minTemp;
         this.maxTemp = maxTemp;
         this.windSpeed = windSpeed;
-        this.windDirection = windDirection;
         this.humidity = humidity;
-        this.pressure = pressure;
         this.rainfallChance = rainfallChance;
         this.rainfallQuantity = rainfallQuantity;
         this.dawnTime = dawnTime;
         this.duskTime = duskTime;
+        this.visibility = visibility;
         this.moonPhase = moonPhase;
-        this.airQuality = airQuality;
     }
 
-    public String getDateAndDescription() {
-        return dateAndDescription;
+    public String getDate() {
+        return date;
     }
 
-    public void setDateAndDescription(String dateAndDescription) {
-        this.dateAndDescription = dateAndDescription;
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getIcon() {
@@ -80,28 +86,12 @@ public class DayRVModal {
         this.windSpeed = windSpeed;
     }
 
-    public String getWindDirection() {
-        return windDirection;
-    }
-
-    public void setWindDirection(String windDirection) {
-        this.windDirection = windDirection;
-    }
-
     public String getHumidity() {
         return humidity;
     }
 
     public void setHumidity(String humidity) {
         this.humidity = humidity;
-    }
-
-    public String getPressure() {
-        return pressure;
-    }
-
-    public void setPressure(String pressure) {
-        this.pressure = pressure;
     }
 
     public String getRainfallChance() {
@@ -136,6 +126,14 @@ public class DayRVModal {
         this.duskTime = duskTime;
     }
 
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
+    }
+
     public String getMoonPhase() {
         return moonPhase;
     }
@@ -144,11 +142,4 @@ public class DayRVModal {
         this.moonPhase = moonPhase;
     }
 
-    public String getAirQuality() {
-        return airQuality;
-    }
-
-    public void setAirQuality(String airQuality) {
-        this.airQuality = airQuality;
-    }
 }

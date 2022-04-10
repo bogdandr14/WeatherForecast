@@ -26,11 +26,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="7 March,\nSunny"
             android:textColor="@color/white"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Minimum Temp.: 10°C"
             android:textColor="@color/white"
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Maximum Temp.: 30°C"
             android:textColor="@color/white"
@@ -70,20 +70,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Wind Speed: 5km/h"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/idForecastWindDirectionTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="10dp"
-            android:text="Wind Direction: NW"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
@@ -92,20 +81,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Humidity: 10%"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/idForecastPressureTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="10dp"
-            android:text="Pressure: 756mmHg"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
@@ -114,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Rainfall chance: 10%"
             android:textColor="@color/white"
@@ -125,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Rainfall quantity: 10mm"
             android:textColor="@color/white"
@@ -136,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Dawn: 08:42"
             android:textColor="@color/white"
@@ -147,31 +125,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Dusk: 21:42"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/idForecastVisibilityTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="10dp"
+            android:text="Visibility: 23km"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+        <TextView
             android:id="@+id/idForecastMoonPhaseTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginBottom="10dp"
             android:text="Moon Phase: Full Moon"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/idForecastAirQualityTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="10dp"
-            android:text="Air Quality: 1"
             android:textColor="@color/white"
             android:textStyle="bold" />
 

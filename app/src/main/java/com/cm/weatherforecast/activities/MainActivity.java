@@ -78,6 +78,10 @@ public class MainActivity extends BaseWeatherActivity {
         hourlyWeatherRV.setAdapter(weatherRVA);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.PERMISSION_CODE);
+        }
 
         cityName = getSelectedCity(savedInstanceState);
         setListeners();
@@ -115,8 +119,8 @@ public class MainActivity extends BaseWeatherActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.PERMISSION_CODE);
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        //return getCityName(location.getLongitude(), location.getLatitude());
-        return Constants.CITY;
+        return getLocationCityName(location.getLongitude(), location.getLatitude());
+       // return Constants.CITY;
     }
 
     private void initializeElementsInActivity() {
@@ -262,14 +266,6 @@ public class MainActivity extends BaseWeatherActivity {
 
             String condition = currentWeatherInfo.getJSONObject(Constants.CONDITION).getString(Constants.TEXT);
             conditionNowTV.setText(condition);
-
-            //Bg image 1:02:05
-//                    int isDay = response.getJSONObject("current").getInt("id_day");
-//                    if (isDay == 1) {
-//                        Picasso.get().load("").into(viewSV);
-//                    } else {
-//                        Picasso.get().load("").into(viewSV);
-//                    }
 
             String feelsLikeKey = tempMeasureKey.equals(Constants.TEMP_C) ? Constants.FEELSLIKE_C : Constants.FEELSLIKE_F;
             int feelsLike = currentWeatherInfo.getInt(feelsLikeKey);

@@ -45,19 +45,11 @@ public class ForecastActivity extends BaseWeatherActivity {
         sevenDayForecastRV.setAdapter(forecastRVA);
 
         String cityName = intent.getStringExtra(Constants.CITY_NAME_MESSAGE);
-        //setDummyDayWeather();
+
         Toast.makeText(this, cityName, Toast.LENGTH_SHORT).show();
         weatherChecker = new WeatherChecker(this);
         weatherChecker.execute(cityName, Constants.WEATHER_API_LINK_FORECAST);
     }
-
-//    private void setDummyDayWeather(){
-//        for (int i = 0; i < 7; i++) {
-//            forecastDaysListRVM.add(new DayRVModal("2001-01-01 " + (i < 10 ? "0" : "") + i + ":00", "35", "cdn.weatherapi.com/weather/64x64/day/122.png"));
-//        }
-//        forecastRVA = new ForecastRVAdapter(this, forecastDaysListRVM);
-//        sevenDayForecastRV.setAdapter(forecastRVA);
-//    }
 
     @Override
     public void setWeatherInfo(JSONObject weatherInfo) {
@@ -71,70 +63,53 @@ public class ForecastActivity extends BaseWeatherActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void setForecastWeather(JSONArray forecastDaysWeatherInfo) {
         forecastDaysListRVM.clear();
-        String tempMeasureKey = preferenceManager.getString(Constants.KEY_TEMP_MEASURE);
-        String tempSymbol = tempMeasureKey.equals(Constants.TEMP_C) ? "°C" : "°F";
-        String windMeasureKey = preferenceManager.getString(Constants.KEY_WIND_MEASURE);
-        String windUnit = windMeasureKey.equals(Constants.WIND_KPH) ? "km/h" : "mph";
-        String rainfallMeasureKey = preferenceManager.getString(Constants.KEY_RAINFALL_MEASURE);
-        String rainfallUnit = rainfallMeasureKey.equals(Constants.PRECIP_MM) ? "mm" : "in";
-        String pressureMeasureKey = preferenceManager.getString(Constants.KEY_PRESSURE_MEASURE);
-        String pressureUnit = pressureMeasureKey.equals(Constants.WIND_KPH) ? "km/h" : "mph";
-        switch (pressureMeasureKey) {
-            case Constants.PRESSURE_MB:
-                pressureUnit = " mb";
-                break;
-            case Constants.PRESSURE_IN:
-                pressureUnit = " mmHg";
-                break;
-            case Constants.PRESSURE_ATM:
-                pressureUnit = "atm";
-                break;
-            case Constants.PRESSURE_PSI:
-                pressureUnit = "psi";
-                break;
-        }
+        String tempMeasure = preferenceManager.getString(Constants.KEY_TEMP_MEASURE);
+        String tempSymbol = tempMeasure.equals(Constants.TEMP_C) ? "°C" : "°F";
+        String windMeasure = preferenceManager.getString(Constants.KEY_WIND_MEASURE);
+        String windUnit = windMeasure.equals(Constants.WIND_KPH) ? "km/h" : "mph";
+        String rainfallMeasure = preferenceManager.getString(Constants.KEY_RAINFALL_MEASURE);
+        String rainfallUnit = rainfallMeasure.equals(Constants.PRECIP_MM) ? "mm" : "in";
+        String visibilityMeasure = preferenceManager.getString(Constants.KEY_VISIBILITY_MEASURE);
+        String visibilityUnit = visibilityMeasure.equals(Constants.VIS_KM) ? "km" : "miles";
+
         try {
-            for (int i = 0; i < forecastDaysWeatherInfo.length(); ++i) {
+            for (int i = 0; i < 7; ++i) {
                 DayRVModal dayRVModal = new DayRVModal();
-                JSONObject dayObj = forecastDaysWeatherInfo.getJSONObject(i);
-                dayRVModal.setDateAndDescription(dayObj.getString(Constants.DATE));
-                dayRVModal.setIcon(dayObj.getJSONObject(Constants.CONDITION).getString(Constants.ICON));
-                dayRVModal.setMinTemp(getString(R.string.min_temp).concat(dayObj.getString(tempMeasureKey) + " " + tempSymbol));
-                dayRVModal.setMaxTemp(getString(R.string.max_temp).concat(dayObj.getString(tempMeasureKey) + " " + tempSymbol));
-                dayRVModal.setWindSpeed(getString(R.string.wind_speed).concat(dayObj.getString(windMeasureKey) + " " + windUnit));
-                dayRVModal.setWindDirection(getString(R.string.wind_speed).concat(dayObj.getString(Constants.WIND_DIR)));
-                dayRVModal.setHumidity(getString(R.string.humidity).concat(dayObj.getString(Constants.HUMIDITY) + "%"));
-                double pressure = 0;
-                switch (pressureMeasureKey) {
-                    case Constants.PRESSURE_MB:
-                        pressure = forecastDaysWeatherInfo.getDouble(Integer.parseInt(Constants.PRESSURE_MB));
-                        break;
-                    case Constants.PRESSURE_IN:
-                        pressure = forecastDaysWeatherInfo.getDouble(Integer.parseInt(Constants.PRESSURE_IN));
-                        pressure = BigDecimal.valueOf(pressure * 25.4)
-                                .setScale(3, RoundingMode.HALF_UP)
-                                .doubleValue();
-                        break;
-                    case Constants.PRESSURE_ATM:
-                        pressure = forecastDaysWeatherInfo.getDouble(Integer.parseInt(Constants.PRESSURE_MB));
-                        pressure = BigDecimal.valueOf(pressure * 0.000987)
-                                .setScale(3, RoundingMode.HALF_UP)
-                                .doubleValue();
-                        break;
-                    case Constants.PRESSURE_PSI:
-                        pressure = forecastDaysWeatherInfo.getDouble(Integer.parseInt(Constants.PRESSURE_IN));
-                        pressure = BigDecimal.valueOf(pressure / 2.036)
-                                .setScale(3, RoundingMode.HALF_UP)
-                                .doubleValue();
-                        break;
-                }
-                dayRVModal.setPressure(getString(R.string.pressure).concat(" " + pressure).concat(pressureUnit));
-                dayRVModal.setRainfallChance(getString(R.string.rainfall_chance).concat(dayObj.getString(Constants.RAINFALL_CHANCE) + "%"));
-                dayRVModal.setRainfallQuantity(getString(R.string.rainfall_quantity).concat(dayObj.getString(rainfallMeasureKey) + " " + rainfallUnit));
-                dayRVModal.setDawnTime(getString(R.string.dawn_time).concat(dayObj.getString(Constants.DAWN_TIME)));
-                dayRVModal.setDuskTime(getString(R.string.dusk_time).concat(dayObj.getString(Constants.DUSK_TIME)));
-                dayRVModal.setMoonPhase(getString(R.string.moon_phase).concat(dayObj.getString(Constants.MOON_PHASE)));
-                dayRVModal.setAirQuality(getString(R.string.air_quality).concat(dayObj.getString(Constants.UV)));
+                JSONObject forecastDayObj = forecastDaysWeatherInfo.getJSONObject(i);
+                JSONObject dayInfoObj = forecastDayObj.getJSONObject(Constants.DAY);
+                JSONObject conditionObj = dayInfoObj.getJSONObject(Constants.CONDITION);
+                JSONObject astroObj = forecastDayObj.getJSONObject(Constants.ASTRO);
+
+                dayRVModal.setDate(forecastDayObj.getString(Constants.DATE));
+
+                dayRVModal.setIcon(conditionObj.getString(Constants.ICON));
+
+                dayRVModal.setDescription(conditionObj.getString(Constants.TEXT));
+
+                Double minTemp = dayInfoObj.getDouble(tempMeasure.equals(Constants.TEMP_C) ? Constants.MIN_TEMP_C : Constants.MIN_TEMP_F);
+                dayRVModal.setMinTemp(getString(R.string.min_temp).concat(" " + minTemp + " " + tempSymbol));
+
+                Double maxTemp = dayInfoObj.getDouble(tempMeasure.equals(Constants.TEMP_C) ? Constants.MAX_TEMP_C : Constants.MAX_TEMP_F);
+                dayRVModal.setMaxTemp(getString(R.string.max_temp).concat(" " + maxTemp + " " + tempSymbol));
+
+                String windSpeed = dayInfoObj.getString(windMeasure.equals(Constants.WIND_KPH) ? Constants.MAXWIND_KPH : Constants.MAXWIND_MPH);
+                dayRVModal.setWindSpeed(getString(R.string.wind_speed).concat(" " + windSpeed + " " + windUnit));
+
+                String visibility = dayInfoObj.getString(visibilityMeasure.equals(Constants.VIS_KM) ? Constants.AVGVIS_KM : Constants.AVGVIS_MILES);
+                dayRVModal.setVisibility(getString(R.string.visibility).concat(" " + visibility + " " + visibilityUnit));
+
+                dayRVModal.setHumidity(getString(R.string.humidity).concat(" " + dayInfoObj.getString(Constants.AVGHUMIDITY) + "%"));
+
+                dayRVModal.setRainfallChance(getString(R.string.rainfall_chance).concat(" " + dayInfoObj.getString(Constants.DAILY_CHANCE_OF_RAIN) + "%"));
+
+                Double rainfallQuantity = dayInfoObj.getDouble(rainfallMeasure.equals(Constants.PRECIP_MM) ? Constants.TOTALPRECIP_MM : Constants.TOTALPRECIP_IN);
+                dayRVModal.setRainfallQuantity(getString(R.string.rainfall_quantity).concat(" " + rainfallQuantity + " " + rainfallUnit));
+
+                dayRVModal.setDawnTime(getString(R.string.dawn_time).concat(" " + astroObj.getString(Constants.DAWN_TIME)));
+
+                dayRVModal.setDuskTime(getString(R.string.dusk_time).concat(" " + astroObj.getString(Constants.DUSK_TIME)));
+
+                dayRVModal.setMoonPhase(getString(R.string.moon_phase).concat(" " + astroObj.getString(Constants.MOON_PHASE)));
 
                 forecastDaysListRVM.add(dayRVModal);
             }
@@ -142,5 +117,12 @@ public class ForecastActivity extends BaseWeatherActivity {
             e.printStackTrace();
         }
         forecastRVA.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        weatherChecker.interruptCheck();
+        super.onBackPressed();
     }
 }

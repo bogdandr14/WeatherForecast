@@ -3,7 +3,7 @@ package com.cm.weatherforecast;
 public class Constants {
 
     public static final String WEATHER_API_LINK_START = "https://api.weatherapi.com/v1/forecast.json?key=244e95839e83453bb05122307222002&q=";
-    public static final String WEATHER_API_LINK_FORECAST = "&days=7&aqi=yes&alerts=no";
+    public static final String WEATHER_API_LINK_FORECAST = "&days=10&aqi=yes&alerts=no";
     public static final String WEATHER_API_LINK_TODAY = "&days=1&aqi=yes&alerts=yes";
 
     public static final String CITY_NAME_MESSAGE = "CITY_NAME_MESSAGE";
@@ -31,9 +31,10 @@ public class Constants {
     public static final String WIND_MPH = "wind_mph";
     public static final String PRECIP_MM = "precip_mm";
     public static final String PRECIP_IN = "precip_in";
-
     public static final String FEELSLIKE_C = "feelslike_c";
     public static final String FEELSLIKE_F = "feelslike_f";
+    public static final String AVGVIS_KM = "avgvis_km";
+    public static final String AVGVIS_MILES = "avgvis_miles";
 
     public static final String CONDITION = "condition";
     public static final String HUMIDITY = "humidity";
@@ -46,13 +47,18 @@ public class Constants {
     public static final String MIN_TEMP_F = "mintemp_f";
     public static final String MAX_TEMP_C = "maxtemp_c";
     public static final String MAX_TEMP_F = "maxtemp_f";
-    public static final String RAINFALL_CHANCE = "daily_chance_of_rain";
-    public static final String RAINFALL_QUANTITY_MM = "totalprecip_mm";
-    public static final String RAINFALL_QUANTITY_IN = "totalprecip_in";
+    public static final String MAXWIND_MPH = "maxwind_mph";
+    public static final String MAXWIND_KPH = "maxwind_kph";
+    public static final String DAILY_CHANCE_OF_RAIN = "daily_chance_of_rain";
+    public static final String TOTALPRECIP_MM = "totalprecip_mm";
+    public static final String TOTALPRECIP_IN = "totalprecip_in";
     public static final String DAWN_TIME = "sunrise";
     public static final String DUSK_TIME = "sunset";
     public static final String MOON_PHASE = "moon_phase";
+    public static final String DAY = "day";
+    public static final String AVGHUMIDITY = "avghumidity";
 
+    public static final String ASTRO = "astro";
     public static final String CURRENT = "current";
     public static final String FORECAST = "forecast";
     public static final String FORECASTDAY = "forecastday";

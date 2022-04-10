@@ -51,7 +51,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull LocationAdapter.ViewHolder holder, int position) {
         LocationModal modal = locationModalArrayList.get(position);
-        holder.binding.idTemperatureTV.setText(modal.getTemperature().concat("°C"));
         holder.binding.idLocationTV.setText(modal.getLocationName());
         holder.binding.idDeleteLocationIV.setOnClickListener(view -> {
             removeLocation(modal.getLocationName());
