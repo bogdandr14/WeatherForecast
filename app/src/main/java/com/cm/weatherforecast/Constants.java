@@ -41,6 +41,17 @@ public class Constants {
     public static final String CLOUD = "cloud";
     public static final String UV = "uv";
 
+    public static final String DATE = "date";
+    public static final String MIN_TEMP_C = "mintemp_c";
+    public static final String MIN_TEMP_F = "mintemp_f";
+    public static final String MAX_TEMP_C = "maxtemp_c";
+    public static final String MAX_TEMP_F = "maxtemp_f";
+    public static final String RAINFALL_CHANCE = "daily_chance_of_rain";
+    public static final String RAINFALL_QUANTITY_MM = "totalprecip_mm";
+    public static final String RAINFALL_QUANTITY_IN = "totalprecip_in";
+    public static final String DAWN_TIME = "sunrise";
+    public static final String DUSK_TIME = "sunset";
+    public static final String MOON_PHASE = "moon_phase";
 
     public static final String CURRENT = "current";
     public static final String FORECAST = "forecast";
