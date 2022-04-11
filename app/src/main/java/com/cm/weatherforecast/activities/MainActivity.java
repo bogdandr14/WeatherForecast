@@ -10,8 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,10 +44,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends BaseWeatherActivity {
+public class MainActivity extends BaseWeatherActivity implements LocationListener {
     private PreferenceManager preferenceManager;
     private WeatherChecker weatherChecker;
 
@@ -118,9 +121,17 @@ public class MainActivity extends BaseWeatherActivity {
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.PERMISSION_CODE);
         }
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
+            // Do something with the recent location fix
+            //  otherwise wait for the update below
+        }
+        else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
+
         return getLocationCityName(location.getLongitude(), location.getLatitude());
-       // return Constants.CITY;
+        //return Constants.CITY;
     }
 
     private void initializeElementsInActivity() {
@@ -357,5 +368,12 @@ public class MainActivity extends BaseWeatherActivity {
         settingsIV.setOnClickListener(view -> onOpenSettingsActivity());
 
         locationManagerIV.setOnClickListener(view -> onOpenInterestLocationsActivity());
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        if (location != null) {
+            locationManager .removeUpdates(this);
+        }
     }
 }
