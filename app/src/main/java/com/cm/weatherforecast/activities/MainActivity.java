@@ -8,6 +8,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -16,10 +17,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -33,6 +36,17 @@ import com.cm.weatherforecast.R;
 import com.cm.weatherforecast.WeatherChecker;
 import com.cm.weatherforecast.adapters.HourlyWeatherRVAdapter;
 import com.cm.weatherforecast.modals.HourlyWeatherRVModal;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
@@ -51,8 +65,9 @@ import java.util.Locale;
 public class MainActivity extends BaseWeatherActivity implements LocationListener {
     private PreferenceManager preferenceManager;
     private WeatherChecker weatherChecker;
-
+    private LocationRequest locationRequest;
     public String cityName;
+    private boolean firstCall;
 
     private ProgressBar loadingPB;
     private ImageView settingsIV, locationManagerIV;
@@ -72,8 +87,14 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         setContentView(R.layout.activity_main);
         preferenceManager = new PreferenceManager(getApplicationContext());
+        firstCall = true;
 
         initializeElementsInActivity();
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
+
         checkSettingsPreferences();
 
         hourlyWeatherListRVM = new ArrayList<>();
@@ -86,11 +107,10 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.PERMISSION_CODE);
         }
 
-        cityName = getSelectedCity(savedInstanceState);
+        weatherChecker = new WeatherChecker(this);
+        getSelectedCity(savedInstanceState);
         setListeners();
 
-        weatherChecker = new WeatherChecker(this);
-        weatherChecker.execute(cityName, Constants.WEATHER_API_LINK_TODAY);
     }
 
     private void checkSettingsPreferences() {
@@ -103,35 +123,98 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
         }
     }
 
+    private boolean isGPSEnabled() {
+        LocationManager locationManager = null;
+        boolean isEnabled = false;
+        if (locationManager == null) {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        }
+        isEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return isEnabled;
+    }
+
     private String getSelectedCity(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
                 return getCurrentLocation();
             } else {
-                return extras.getString(Constants.CITY_NAME_MESSAGE);
+                cityName = extras.getString(Constants.CITY_NAME_MESSAGE);
+                weatherChecker.execute(cityName, Constants.WEATHER_API_LINK_TODAY);
+                return cityName;
             }
         } else {
-            return (String) savedInstanceState.getSerializable(Constants.CITY_NAME_MESSAGE);
+            cityName = (String) savedInstanceState.getSerializable(Constants.CITY_NAME_MESSAGE);
+            weatherChecker.execute(cityName, Constants.WEATHER_API_LINK_TODAY);
+            return cityName;
         }
     }
 
     private String getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.PERMISSION_CODE);
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.PERMISSION_CODE);
         }
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
-            // Do something with the recent location fix
-            //  otherwise wait for the update below
+        if (isGPSEnabled()) {
+            LocationServices.getFusedLocationProviderClient(MainActivity.this).requestLocationUpdates(locationRequest, new LocationCallback() {
+                @Override
+                public void onLocationResult(@NonNull LocationResult locationResult) {
+                    super.onLocationResult(locationResult);
+                    LocationServices.getFusedLocationProviderClient(MainActivity.this).removeLocationUpdates(this);
+                    if (locationResult != null && locationResult.getLocations().size() > 0) {
+                        int index = locationResult.getLocations().size() - 1;
+                        Location location = locationResult.getLocations().get(index);
+                        cityName = getLocationCityName(location.getLatitude(), location.getLongitude());
+                        weatherChecker.execute(cityName, Constants.WEATHER_API_LINK_TODAY);
+                    }
+                }
+            }, Looper.getMainLooper());
+            return null;
+        } else {
+            turnOnGPS();
+            cityName = Constants.CITY;
+            weatherChecker.execute(cityName, Constants.WEATHER_API_LINK_TODAY);
+            return cityName;
         }
-        else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        }
+    }
 
-        return getLocationCityName(location.getLongitude(), location.getLatitude());
-        //return Constants.CITY;
+    private void turnOnGPS() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+
+        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(getApplicationContext())
+                .checkLocationSettings(builder.build());
+
+        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+
+                try {
+                    LocationSettingsResponse response = task.getResult(ApiException.class);
+                    Toast.makeText(MainActivity.this, "GPS is already tured on", Toast.LENGTH_SHORT).show();
+
+                } catch (ApiException e) {
+
+                    switch (e.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+
+                            try {
+                                ResolvableApiException resolvableApiException = (ResolvableApiException) e;
+                                resolvableApiException.startResolutionForResult(MainActivity.this, 2);
+                            } catch (IntentSender.SendIntentException ex) {
+                                ex.printStackTrace();
+                            }
+                            break;
+
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            //Device does not have location
+                            break;
+                    }
+                }
+            }
+        });
     }
 
     private void initializeElementsInActivity() {
@@ -162,7 +245,7 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
         forecastMB = findViewById(R.id.idForecastMB);
     }
 
-    private String getLocationCityName(double longitude, double latitude) {
+    private String getLocationCityName(double latitude, double longitude) {
         String cityName = getString(R.string.city_not_found);
         Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
         try {
@@ -172,9 +255,6 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
                     String city = adr.getLocality();
                     if (city != null && !city.equals("")) {
                         cityName = city;
-                    } else {
-                        Log.d("TAG", getString(R.string.city_not_found));
-                        Toast.makeText(this, getString(R.string.city_not_found), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -256,6 +336,10 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
     @Override
     public void setWeatherInfo(JSONObject weatherInfo) {
         try {
+            if (firstCall) {
+                this.loadingPB.setVisibility(View.GONE);
+                firstCall = false;
+            }
             cityNameTV.setText(weatherInfo.getJSONObject(Constants.LOCATION).getString(Constants.NAME));
             setWeatherInfoNow(weatherInfo.getJSONObject(Constants.CURRENT));
             setHourlyWeather(weatherInfo.getJSONObject(Constants.FORECAST).getJSONArray(Constants.FORECASTDAY).getJSONObject(0).getJSONArray(Constants.HOUR));
@@ -373,7 +457,7 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
     @Override
     public void onLocationChanged(@NonNull Location location) {
         if (location != null) {
-            locationManager .removeUpdates(this);
+            locationManager.removeUpdates(this);
         }
     }
 }

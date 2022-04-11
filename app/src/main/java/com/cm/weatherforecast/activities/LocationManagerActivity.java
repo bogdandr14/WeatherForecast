@@ -22,7 +22,6 @@ import java.util.Objects;
 
 public class LocationManagerActivity extends AppCompatActivity {
     private PreferenceManager preferenceManager;
-    private WeatherChecker weatherChecker;
 
     TextInputEditText citySearchTIET;
     ImageView cityAddIV;
