@@ -2,23 +2,25 @@ package com.cm.weatherforecast.activities;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,7 +60,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,6 +80,11 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
     private ArrayList<HourlyWeatherRVModal> hourlyWeatherListRVM;
     private HourlyWeatherRVAdapter weatherRVA;
     private LocationManager locationManager;
+
+    private static final String CHANNEL_ID = "notification_channel";
+    private NotificationManager mNotifyManager;
+    private static final int NOTIFICATION_ID = 0;
+    private boolean control = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +117,39 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
         getSelectedCity(savedInstanceState);
         setListeners();
 
+        createNotificationChannel();
+    }
+
+    public void sendNotification()
+    {
+        NotificationCompat.Builder notifyBuilder = getNotificationBuilder();
+        mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());
+    }
+
+    public void createNotificationChannel()
+    {
+        mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
+                    "Notifications", NotificationManager
+                    .IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setDescription("Notifications for Weather Forecast");
+            mNotifyManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    private NotificationCompat.Builder getNotificationBuilder()
+    {
+        NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("Extreme heat alert!")
+                .setContentText("Avoid the sun and drink plenty of fluids to stay hydrated.")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL);
+        return notifyBuilder;
     }
 
     private void checkSettingsPreferences() {
@@ -355,6 +394,16 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
 
             int temperature = currentWeatherInfo.getInt(tempMeasureKey);
             temperatureNowTV.setText(String.valueOf(temperature).concat(tempSymbol));
+
+            if ((temperature > 4 && tempSymbol.equals(" °C")) || (temperature > 94 && tempSymbol.equals(" °F")))
+            {
+                if (control) {
+                    sendNotification();
+                    control = false;
+                }
+            } else {
+                mNotifyManager.cancel(NOTIFICATION_ID);
+            }
 
             String icon = currentWeatherInfo.getJSONObject(Constants.CONDITION).getString(Constants.ICON);
             Picasso.get().load("https:".concat(icon)).into(weatherNowIV);
