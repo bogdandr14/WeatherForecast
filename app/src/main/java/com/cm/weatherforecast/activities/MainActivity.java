@@ -21,6 +21,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -341,7 +342,10 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
 
     private void onOpenInterestLocationsActivity() {
         weatherChecker.interruptCheck();
-        startActivity(new Intent(getApplicationContext(), LocationManagerActivity.class));
+        Intent intent = new Intent(getApplicationContext(), LocationManagerActivity.class);
+        String cityToSend = cityNameTV.getText().toString();
+        intent.putExtra("messageToSend", cityToSend);
+        startActivity(intent);
     }
 
     @Override
