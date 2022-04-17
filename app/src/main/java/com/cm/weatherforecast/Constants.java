@@ -18,6 +18,11 @@ public class Constants {
     public static final String KEY_WIND_MEASURE = "KEY_WIND_MEASURE";
     public static final String KEY_RAINFALL_MEASURE = "KEY_RAINFALL_MEASURE";
 
+    public static final String ALERTS = "alerts";
+    public static final String ALERT = "alert";
+    public static final String EVENT = "event";
+    public static final String INSTR = "instruction";
+
 
     public static final String TEMP_C = "temp_c";
     public static final String TEMP_F = "temp_f";

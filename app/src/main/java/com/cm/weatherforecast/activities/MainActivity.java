@@ -21,6 +21,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -85,6 +86,8 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
     private NotificationManager mNotifyManager;
     private static final int NOTIFICATION_ID = 0;
     private boolean control = true;
+    private String event = null;
+    private String desc = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,8 +147,8 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
     private NotificationCompat.Builder getNotificationBuilder()
     {
         NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Extreme heat alert!")
-                .setContentText("Avoid the sun and drink plenty of fluids to stay hydrated.")
+                .setContentTitle(event)
+                .setContentText(desc)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
@@ -380,8 +383,26 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
                 firstCall = false;
             }
             cityNameTV.setText(weatherInfo.getJSONObject(Constants.LOCATION).getString(Constants.NAME));
+            checkAlerts(weatherInfo.getJSONObject(Constants.ALERTS));
             setWeatherInfoNow(weatherInfo.getJSONObject(Constants.CURRENT));
             setHourlyWeather(weatherInfo.getJSONObject(Constants.FORECAST).getJSONArray(Constants.FORECASTDAY).getJSONObject(0).getJSONArray(Constants.HOUR));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void checkAlerts(JSONObject alertsInfo) {
+        try {
+            JSONArray alerts = alertsInfo.getJSONArray(Constants.ALERT);
+            if (alerts != null) {
+                JSONObject alert = alerts.getJSONObject(0);
+                event = alert.getString(Constants.EVENT);
+                desc = alert.getString(Constants.INSTR);
+            }
+            if (control) {
+                sendNotification();
+                control = false;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -394,16 +415,6 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
 
             int temperature = currentWeatherInfo.getInt(tempMeasureKey);
             temperatureNowTV.setText(String.valueOf(temperature).concat(tempSymbol));
-
-            if ((temperature > 4 && tempSymbol.equals(" °C")) || (temperature > 94 && tempSymbol.equals(" °F")))
-            {
-                if (control) {
-                    sendNotification();
-                    control = false;
-                }
-            } else {
-                mNotifyManager.cancel(NOTIFICATION_ID);
-            }
 
             String icon = currentWeatherInfo.getJSONObject(Constants.CONDITION).getString(Constants.ICON);
             Picasso.get().load("https:".concat(icon)).into(weatherNowIV);
@@ -424,7 +435,7 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
             humidityTV.setText(getString(R.string.humidity).concat(" " + humidity).concat(" %"));
 
             String visibilityMeasureKey = preferenceManager.getString(Constants.KEY_VISIBILITY_MEASURE);
-            String visibilityUnit = windMeasureKey.equals(Constants.VIS_KM) ? " km" : " miles";
+            String visibilityUnit = visibilityMeasureKey.equals(Constants.VIS_KM) ? " km" : " miles";
             int visibility = currentWeatherInfo.getInt(visibilityMeasureKey);
             visibilityTV.setText(getString(R.string.visibility).concat(" " + visibility).concat(visibilityUnit));
 

@@ -106,7 +106,8 @@ public class LocationManagerActivity extends AppCompatActivity {
                         Location location = locationResult.getLocations().get(index);
                         cityName = getLocationCityName(location.getLatitude(), location.getLongitude());
                     }
-                    //locationsList.add(new LocationModal(cityName.toString(), "35"));
+                    locationsList.add(new LocationModal(cityName.toString(), "35"));
+                    locationAdapter.notifyDataSetChanged();
                 }
             }, Looper.getMainLooper());
         } else {
@@ -180,7 +181,9 @@ public class LocationManagerActivity extends AppCompatActivity {
             String[] locations = interestLocations.split(";");
             for (String location : locations
             ) {
-                locationsList.add(new LocationModal(location, "35"));
+                if (location.length() > 0) {
+                    locationsList.add(new LocationModal(location, "35"));
+                }
             }
         }
         locationAdapter = new LocationAdapter(this, locationsList, preferenceManager);

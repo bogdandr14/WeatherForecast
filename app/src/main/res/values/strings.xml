@@ -29,12 +29,12 @@
     <string name="wind_direction">Wind Direction: </string>
     <string name="clouds">Clouds: </string>
     <string name="uv_index">UV Index: </string>
-    <string name="min_temp">Minimum Temp.: </string>
-    <string name="max_temp">Maximum Temp.: </string>
+    <string name="min_temp">Min Temp.: </string>
+    <string name="max_temp">Max Temp.: </string>
     <string name="rainfall_chance">Rainfall Chance.: </string>
     <string name="dawn_time">Dawn: </string>
     <string name="dusk_time">Dusk: </string>
-    <string name="moon_phase">Moon Phase: </string>
+    <string name="moon_phase">Moon: </string>
     <string name="air_quality">Air Quality: </string>
     <string name="city_not_found">City not found…</string>
     <string name="permission_granted">Permissions granted!</string>
