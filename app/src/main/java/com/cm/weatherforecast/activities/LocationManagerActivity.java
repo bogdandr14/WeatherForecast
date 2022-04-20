@@ -2,7 +2,9 @@
 package com.cm.weatherforecast.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -12,6 +14,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -77,6 +82,38 @@ public class LocationManagerActivity extends AppCompatActivity {
         setListener();
 
         getCurrentLocation();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        MenuItem interestLoc = menu.findItem(R.id.idInterestLocationsI);
+        interestLoc.setVisible(false);
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.idSettingsI:
+                onOpenSettingsActivity();
+                return true;
+            case R.id.idBackI:
+                onOpenMainActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onOpenMainActivity() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
+    private void onOpenSettingsActivity() {
+        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
     }
 
     private boolean isGPSEnabled() {

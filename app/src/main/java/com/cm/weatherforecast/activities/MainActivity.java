@@ -9,6 +9,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -262,10 +263,6 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
     private void initializeElementsInActivity() {
         loadingPB = findViewById(R.id.idLoadingPB);
 
-        //Images for redirecting to other activities
-        locationManagerIV = findViewById(R.id.idLocationManagerIV);
-        settingsIV = findViewById(R.id.idSettingsIV);
-
         //Weather now for current selected location
         cityNameTV = findViewById(R.id.idCityNameTV);
         temperatureNowTV = findViewById(R.id.idTemperatureNowTV);
@@ -310,7 +307,8 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-
+        MenuItem back = menu.findItem(R.id.idBackI);
+        back.setVisible(false);
         return true;
     }
 
@@ -355,9 +353,6 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
             if (resultCode == RESULT_OK) {
                 String cityName = data.getStringExtra(Constants.CITY_NAME_MESSAGE);
                 cityNameTV.setText(cityName);
-                //TODO use api to get info for the current CITY
-            } else {
-                //TODO use api to get info for the current LOCATION
             }
         }
     }
@@ -508,10 +503,6 @@ public class MainActivity extends BaseWeatherActivity implements LocationListene
 
     private void setListeners() {
         forecastMB.setOnClickListener(view -> onOpenForecastActivity());
-
-        settingsIV.setOnClickListener(view -> onOpenSettingsActivity());
-
-        locationManagerIV.setOnClickListener(view -> onOpenInterestLocationsActivity());
     }
 
     @Override

@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.cm.weatherforecast.BaseWeatherActivity;
 import com.cm.weatherforecast.Constants;
@@ -19,8 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class ForecastActivity extends BaseWeatherActivity {
@@ -46,7 +43,6 @@ public class ForecastActivity extends BaseWeatherActivity {
 
         String cityName = intent.getStringExtra(Constants.CITY_NAME_MESSAGE);
 
-        Toast.makeText(this, cityName, Toast.LENGTH_SHORT).show();
         weatherChecker = new WeatherChecker(this);
         weatherChecker.execute(cityName, Constants.WEATHER_API_LINK_FORECAST);
     }

@@ -1,12 +1,18 @@
 package com.cm.weatherforecast.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cm.weatherforecast.Constants;
 import com.cm.weatherforecast.PreferenceManager;
+import com.cm.weatherforecast.R;
 import com.cm.weatherforecast.databinding.ActivitySettingsBinding;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -25,6 +31,38 @@ public class SettingsActivity extends AppCompatActivity {
 
         setPreferenceValues();
         setListeners();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        MenuItem settings = menu.findItem(R.id.idSettingsI);
+        settings.setVisible(false);
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.idInterestLocationsI:
+                onOpenInterestLocationsActivity();
+                return true;
+            case R.id.idBackI:
+                onOpenMainActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onOpenMainActivity() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
+    private void onOpenInterestLocationsActivity() {
+        startActivity(new Intent(getApplicationContext(), LocationManagerActivity.class));
     }
 
     private void setPreferenceValues() {
